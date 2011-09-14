@@ -20,7 +20,7 @@ public class GameServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Race Course Server started");
+        System.out.println("Game Server started");
         
         GameServer gameServ = new GameServer();
         gameServ.run(); 
@@ -48,7 +48,7 @@ public class GameServer {
                 msg = br.readLine();
             }catch(IOException ignore){}
             if(msg.equals("exit")){
-                System.out.println("Exiting from rcs");
+                System.out.println("Exiting from gs");
                 done = true;
             }
             

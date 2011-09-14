@@ -27,6 +27,7 @@ public class ClientHandler implements Runnable{
         
         this.server = server;
         clients = new ArrayList<ClientConnection>();
+        System.out.println("ClientHandler started");
     }
     
     @Override
@@ -56,7 +57,8 @@ public class ClientHandler implements Runnable{
                 clientSock = null;
             }
 
-            System.out.println("Client has been served");
+            System.out.println("Client has been served by ClientHandler. "
+                    + "Now looking for new connections");
             int i = 0; 
         }
     }

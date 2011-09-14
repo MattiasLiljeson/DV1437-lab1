@@ -30,6 +30,7 @@ public class ClientConnection implements Runnable{
             }catch(IOException ex){
                 System.out.println("Error in stream creation");
             }
+            System.out.println("ClientConnection started");
         }
         
         @Override
@@ -46,15 +47,15 @@ public class ClientConnection implements Runnable{
                 }
                 catch(IOException ex){
                     System.out.println("Problem with socket input");
+                    close();
                 }
 
                 if(keyStates != null){
                     System.out.println("Received payload:");
                     System.out.println(keyStates.toString());
+                    //Send em' up to the top
+                    clientHandler.updateKeyStates(id, keyStates);
                 }
-                
-                //Send em' up to the top
-                clientHandler.updateKeyStates(id, keyStates);
             }
         }
         
