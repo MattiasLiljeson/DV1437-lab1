@@ -17,23 +17,43 @@ public class KeyStates {
         keyDown = new boolean[4];
     }
     
-    public void setKeyDown(int index, boolean state){
+    public boolean getKey(int index){
+        return keyDown[index];
+    }
+    
+    public boolean getKeyUp(){
+        return keyDown[kUp];
+    }
+    
+    public boolean getKeyDown(){
+        return keyDown[kDown];
+    }
+    
+    public boolean getKeyLeft(){
+        return keyDown[kLeft];
+    }
+    
+    public boolean getKeyRight(){
+        return keyDown[kRight];
+    }
+    
+    public void setKey(int index, boolean state){
         keyDown[index] = state;
     }
     
     public void setKeyUp(boolean state){
-        setKeyDown(kUp, state);
+        setKey(kUp, state);
     }
     
     public void setKeyDown(boolean state){
-        setKeyDown(kDown, state);
+        setKey(kDown, state);
     }
     
     public void setKeyLeft(boolean state){
-        setKeyDown(kLeft, state);
+        setKey(kLeft, state);
     }
     
     public void setKeyRight(boolean state){
-        setKeyDown(kRight, state);
+        setKey(kRight, state);
     }  
 }

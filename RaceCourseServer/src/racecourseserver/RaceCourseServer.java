@@ -93,8 +93,8 @@ public class RaceCourseServer {
         
     }
     private class RaceCourseSend implements Runnable{
-        Socket socket;
-        RaceCourse payload;
+        private Socket socket;
+        private RaceCourse payload;
         
         public RaceCourseSend(Socket sock, RaceCourse payload){ 
             this.socket = sock;
@@ -103,7 +103,6 @@ public class RaceCourseServer {
 
         @Override
         public void run() {
-            OutputStream oStream = null;
             ObjectOutputStream ooStream = null;
             
             // HACK: Prevents Client from getting recv failed.
@@ -115,14 +114,7 @@ public class RaceCourseServer {
             }
             
             try{
-                oStream = socket.getOutputStream();
-            }catch(IOException ex){
-                System.out.println("Error in socket creation");
-            }
-            
-            try{
-                if(oStream != null)
-                    ooStream = new ObjectOutputStream(oStream);
+                ooStream = new ObjectOutputStream(socket.getOutputStream());
             }catch(IOException ex){
                 System.out.println("Error in output stream creation");
             }

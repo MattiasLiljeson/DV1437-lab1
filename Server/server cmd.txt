@@ -1,2 +1,2 @@
 cmd:
-java C:\Users\Mattias\Dropbox\Skola\BTH\3-1-2011ht\lab1\lab1^ egen^ kodbas\RaceCourseServer\dist\RaceCourseServer.jar
+java "C:\Users\Mattias\Dropbox\Skola\BTH\3-1-2011ht\lab1\lab1 egen kodbas\RaceCourseServer\dist\RaceCourseServer.jar"

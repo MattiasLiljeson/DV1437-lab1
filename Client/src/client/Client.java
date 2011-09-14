@@ -114,7 +114,7 @@ public class Client {
                 if(tmp instanceof RaceUpdate){
                     //TODO: update view
                 }
-                else if(tmp instanceof SendKeyStates){
+                else if(tmp instanceof KeyStatesReq){
                     //TODO: send keystates
                 }
             }
