@@ -3,6 +3,7 @@
  */
 package client;
 
+import common.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,7 @@ public class GUI {
     public final static int START_PANEL = 0;
     public final static int GAME_PANEL = 1;
     
-    private boolean done;
+    private boolean readyToPlay;
     private String playerName;
     private String hostname;
     private String carColor;
@@ -88,12 +89,21 @@ public class GUI {
         return hostname;
     }
     
+    public KeyStates getKeyStates(){
+        //TODO: update keystates
+        return gamePanel.getKeyStates();
+    }
+    
     public String getPlayerName(){
         return playerName;
     }
     
-    public boolean isDone(){
-        return done;
+    public boolean isReadyToPlay(){
+        return readyToPlay;
+    }
+    
+    public void update(RaceUpdate raceUpdate){
+        //TODO: Update panel. Draw latest info
     }
     
     private class buttonListener implements ActionListener{
@@ -103,7 +113,7 @@ public class GUI {
             playerName = playerNameField.getText();
             hostname = hostnameField.getText();
             carColor = (String)carColorBox.getSelectedItem();
-            done = true;
+            readyToPlay = true;
         }
         
     }

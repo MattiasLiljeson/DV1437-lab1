@@ -3,11 +3,13 @@
  */
 package common;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
-public class KeyStates {
+public class KeyStates implements Serializable{
     
     static final int kUp = 0, kDown = 1, kLeft = 2, kRight = 3;
     

@@ -89,6 +89,7 @@ public class ClientConnection implements Runnable{
         }
         
         public boolean poll(){
+            System.out.println("Polling");
             return sendObject(new KeyStatesReq());
         }
         
@@ -108,6 +109,7 @@ public class ClientConnection implements Runnable{
         }
         
         public boolean sendRaceUpdate(RaceUpdate update){
+            System.out.println("Sending race update");
             return sendObject(update);
         }
     }

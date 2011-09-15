@@ -4,12 +4,13 @@
 package common;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Container for data regarding the race. Such as the cars positions etc.
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
-public class RaceUpdate {
+public class RaceUpdate implements Serializable{
     private Point[] positions;
     private Color[] colors;
     private int numCars;

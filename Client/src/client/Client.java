@@ -20,6 +20,7 @@ public class Client {
     private RaceCourse raceCourse;
     private ObjectInputStream inStream;
     private ObjectOutputStream outStream;
+    private GUI gui;
     
     /**
      * @param args the command line arguments
@@ -30,8 +31,8 @@ public class Client {
     }
     
     public void run(){
-        GUI gui = new GUI();
-        while(!gui.isDone()){
+        gui = new GUI();
+        while(!gui.isReadyToPlay()){
             // Do nothing
         }
         String hostname = gui.getHostname();
@@ -98,10 +99,10 @@ public class Client {
     }
 
     private void gameLoop() {
-        Object tmp = null;
+        Object object = null;
         while(true){
             try{
-                tmp = inStream.readObject();
+                object = inStream.readObject();
             }
             catch(ClassNotFoundException ex)
             {
@@ -109,24 +110,35 @@ public class Client {
             }
             catch(IOException ex){
                 System.out.println("Problem with socket input");
+                ex.printStackTrace();
             }
-            if( tmp != null){
-                if(tmp instanceof RaceUpdate){
-                    //TODO: update view
+            if( object != null){
+                if(object instanceof RaceUpdate){
+                    gui.update((RaceUpdate)object);
+                    System.out.println("RaceUpdate received");
                 }
-                else if(tmp instanceof KeyStatesReq){
+                else if(object instanceof KeyStatesReq){
                     //TODO: send keystates
+                    System.out.println("KeyStatesReq received");
+                    KeyStates keyStates =  gui.getKeyStates();
+                    sendObject(keyStates);
                 }
             }
         }
     }
     
-    private void parse(String msg){
-        if(msg.contains("returnKeys"))
-            returnKeys();
-    }
-
-    private void returnKeys() {
-        
-    }
+    public boolean sendObject(Object obj){
+            boolean success = false;
+            try{
+                if(outStream != null){
+                    outStream.writeObject(obj);  // send serilized payload
+                    outStream.flush();
+                    success = true;
+                }
+            }catch(IOException ex){
+                System.out.println("Error when sending object through stream");
+                success = false;
+            }
+            return success;
+        }
 }

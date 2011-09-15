@@ -4,7 +4,6 @@
 package gameserver;
 
 import common.*;
-import java.awt.Color;
 import java.io.*;
 import java.util.*;
 
@@ -15,6 +14,7 @@ import java.util.*;
 public class GameServer {
     private int pollingRate = 60;
     private Map<Integer,Car> cars;
+    private boolean done = false;
     
     /**
      * @param args the command line arguments
@@ -36,24 +36,19 @@ public class GameServer {
         Thread clientHandlerThread = new Thread(clientHandler);
         clientHandlerThread.start();
         
-        //Enter main loop
-        boolean done = false;
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String msg = "";
-        long prevTime = System.currentTimeMillis();
+        //Create ExitListener thread to listen to exit message from std input
+        Thread exitListenerThread = new Thread(new ExitListener());
+        exitListenerThread.start();
         
+        //Enter main loop
+        long prevTime = System.currentTimeMillis();
         while(!done){
-            // Handle exit msg
-            try{
-                msg = br.readLine();
-            }catch(IOException ignore){}
-            if(msg.equals("exit")){
-                System.out.println("Exiting from gs");
-                done = true;
-            }
-            
             //Poll clients, update, send new positions to clients
-            if((prevTime - System.currentTimeMillis()) > (1000/pollingRate)){
+            //DEBUG: test algorithm
+            double tmp1 = System.currentTimeMillis() - prevTime;
+            double tmp2 = (1000/pollingRate);
+            boolean tmp3 = (prevTime - System.currentTimeMillis()) > (1000/pollingRate);
+            if((System.currentTimeMillis() - prevTime) > (1000/pollingRate)){
                 clientHandler.pollClients();
                 
                 RaceUpdate update = new RaceUpdate(cars.size());
@@ -68,9 +63,32 @@ public class GameServer {
         }
         System.exit(0);
     }
+    public void addCar(int id, Car car){
+        cars.put(id,car);
+    }
+    
     
     public void updateKeyStates(int id, KeyStates keyStates){
         cars.get(id).setKeyStates(keyStates);
+    }
+    
+    private class ExitListener implements Runnable{
+
+        @Override
+        public void run() {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String msg = "";
+            
+            // Handle exit msg
+            try{
+                msg = br.readLine();
+            }catch(IOException ignore){}
+            if(msg.equals("exit")){
+                System.out.println("Exiting from gs");
+                done = true;
+            }
+        }
+        
     }
     
 }
