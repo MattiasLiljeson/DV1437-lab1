@@ -1,1 +1,5 @@
 *private.properties
+*/dist/*
+*/dist/
+*/build/*
+*/build/
