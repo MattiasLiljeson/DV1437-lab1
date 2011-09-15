@@ -1,5 +1,1 @@
-Client/nbproject/private/private.properties
-Common/nbproject/private/private.properties
-GameServer/nbproject/private/private.properties
-RaceCourseServer/nbproject/private/private.properties
-Server/nbproject/private/private.properties
+*private.properties
