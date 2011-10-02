@@ -31,7 +31,7 @@ public class GameServer {
     }
     
     public void run(){
-        //Create clientHandlerThread thread to handle new map requests
+        //Create clientHandlerThread thread to handle connection with clients
         ClientHandler clientHandler = new ClientHandler(this);
         Thread clientHandlerThread = new Thread(clientHandler);
         clientHandlerThread.start();
@@ -69,7 +69,11 @@ public class GameServer {
     
     
     public void updateKeyStates(int id, KeyStates keyStates){
-        cars.get(id).setKeyStates(keyStates);
+        Car car = cars.get(id);
+        if(car != null){
+            car.setKeyStates(keyStates);
+            // TODO: throw exception?
+        }
     }
     
     private class ExitListener implements Runnable{

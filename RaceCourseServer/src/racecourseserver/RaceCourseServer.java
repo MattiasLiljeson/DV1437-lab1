@@ -15,8 +15,9 @@ import java.net.*;
 public class RaceCourseServer {
     public final static String SERVER_HOSTNAME = "localhost";
     public final static int COMM_PORT = 5678;
-    ServerSocket servSock;
+//    ServerSocket servSock;
     RaceCourse raceCourse;
+    Channel channel;
     
     /**
      * @param args the command line arguments
@@ -29,15 +30,12 @@ public class RaceCourseServer {
     }
     
     public RaceCourseServer(){
-        // DEBUG:
-        //System.out.println("Constructor entered");
-        try{
-            servSock = new ServerSocket(COMM_PORT);
-        }catch(IOException ignore){
-            //ignore
-        }
+//        try{
+//            servSock = new ServerSocket(COMM_PORT);
+//        }catch(IOException ignore){}
         
-        //TODO: fix so that racecourse works as it should.
+        channel = new Channel(COMM_PORT);
+        channel.startServer();
         raceCourse = RaceCourse.getInstance();
     }
     
@@ -45,11 +43,9 @@ public class RaceCourseServer {
         //Create accepter thread to handle new map requests
         Thread accepter = new Thread(new RaceCourseAccepter());
         accepter.start();
-//        try{
-//            accepter.join();
-//        }catch(InterruptedException ignore){}
         
-        //Enter main loop which listens to the 'exit' signal
+        // Enter main loop which listens to the 'exit' signal
+        // TODO: ugly way of shutting down subthreads, fix this
         boolean done = false;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String input = "";
@@ -71,13 +67,7 @@ public class RaceCourseServer {
         public void run() {
             Socket clientSock = null;
             while(true){
-                try{
-                    clientSock = servSock.accept();
-                }catch(IOException ex){
-                    System.out.println("Error when waiting for connection");
-                    ex.printStackTrace();
-                }
-
+                clientSock = channel.accept();
                 System.out.println("A new client has connected");
 
                 if(clientSock != null){
@@ -87,74 +77,38 @@ public class RaceCourseServer {
                 }
 
                 System.out.println("Client has been served");
-                int i = 0; 
             }
         }
         
     }
     private class RaceCourseSend implements Runnable{
-        private Socket socket;
+        private Socket sock;
         private RaceCourse payload;
+        private Channel channel;
         
-        public RaceCourseSend(Socket sock, RaceCourse payload){ 
-            this.socket = sock;
+        public RaceCourseSend(Socket socket, RaceCourse payload){ 
+            this.sock = socket;
             this.payload = payload;
+            
+            channel = new Channel(socket);
         }
 
         @Override
         public void run() {
-            ObjectOutputStream ooStream = null;
-            
-            // HACK: Prevents Client from getting recv failed.
-            // TODO: Why is this needed?
-            try{
-                Thread.sleep(1); 
-            }catch(InterruptedException ex){
-                // Do nothing.
+            channel.openStreams();
+            if(!channel.sendObject(payload)){
+                System.out.println("Failed to send race course");
             }
-            
-            try{
-                ooStream = new ObjectOutputStream(socket.getOutputStream());
-            }catch(IOException ex){
-                System.out.println("Error in output stream creation");
-            }
-            
-            try{
-                if(ooStream != null){
-                    ooStream.writeObject(this.payload);  // send serilized payload
-                    ooStream.flush();
-                }
-            }catch(IOException ex){
-                System.out.println("Error when sending object through stream");
-            }
-            
-            try{
-                if(ooStream != null)
-                    ooStream.close();
-            }catch(IOException ex){
-                System.out.println("Error when closing stream");
-            }
+            channel.closeStreams();
             
             try{
                 // Leave time for the client to close its input stream
                 Thread.sleep(1000); 
-            }catch(InterruptedException ex){
-                // Do nothing.
-            }
-            
-            // Always do the following
-            finally
-            {
-                try
-                {
-                    socket.close();
-                }
-                catch (IOException ex)
-                {
-                    System.err.println("Unable to close an open socket.");
-                    System.err.println(ex.toString());
-                    System.exit(1);
-                }
+            }catch(InterruptedException ignore){}
+            finally{
+                System.out.println("In finally statement, closing sockets");
+                channel.closeSockets();
+                System.out.println("In finally statement, closed sockets");
             }
             
         }
