@@ -16,10 +16,7 @@ public class Client {
     public final static int PORT_RCS = 5678;
     public final static int PORT_GS = 5679;
     
-//    private Socket socket;
     private RaceCourse raceCourse;
-//    private ObjectInputStream inStream;
-//    private ObjectOutputStream outStream;
     private GUI gui;
     private Channel channel;
     
@@ -33,9 +30,10 @@ public class Client {
     
     public void run(){
         gui = new GUI();
-        while(!gui.isReadyToPlay()){
+        //while(!gui.isReadyToPlay()){
             // Wait for user to press the "Play!" button
-        }
+        //}
+        gui.doWait();
         
         String hostname = gui.getHostname();
         String playerName = gui.getPlayerName();

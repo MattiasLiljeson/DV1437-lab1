@@ -98,22 +98,40 @@ public class GUI {
         return playerName;
     }
     
-    public boolean isReadyToPlay(){
-        return readyToPlay;
-    }
+//    public boolean isReadyToPlay(){
+//        return readyToPlay;
+//    }
     
     public void update(RaceUpdate raceUpdate){
         //TODO: Update panel. Draw latest info
     }
     
+    // !WARNING!
+    // ---! EVIL HACK BELOW !---
+    // !WARNING!
+    //
+    // The two following methods are a hack were wait/notify are misued to cause
+    // the Client to wait for the "Play!" button is pressed.
+    public synchronized void doWait(){
+        if(!readyToPlay){
+            try{
+                wait();
+            }catch(InterruptedException ignore){}
+        }
+    }
+    
+    private synchronized void doNotify(){
+        notify();
+    }
+    
     private class buttonListener implements ActionListener{
-
         @Override
         public void actionPerformed(ActionEvent e) {
             playerName = playerNameField.getText();
             hostname = hostnameField.getText();
             carColor = (String)carColorBox.getSelectedItem();
             readyToPlay = true;
+            doNotify();
         }
         
     }
