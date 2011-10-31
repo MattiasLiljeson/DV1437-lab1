@@ -3,65 +3,74 @@
  */
 package common;
 
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
 public class KeyStates implements Serializable{
-	
-	static enum Key {
-		UP, DOWN, LEFT, RIGHT;
-		
-		Key(byte keyCode)
-	}
-	
-    static final int kUp = 0, kDown = 1, kLeft = 2, kRight = 3;
     
-    boolean[] keyDown;    
-    
-    public KeyStates() {
-        keyDown = new boolean[4];
+    Map<Integer, Boolean> keyMap;
+    static enum Key {
+        UP(KeyEvent.VK_UP), DOWN(KeyEvent.VK_DOWN), LEFT(KeyEvent.VK_LEFT), RIGHT(KeyEvent.VK_RIGHT);
+
+        int keyCode;
+        Key(int keyCode) {
+            this.keyCode = keyCode;
+        }
     }
     
-    public boolean getKey(int index){
-        return keyDown[index];
+    //boolean[] keyDown;    
+    
+    public KeyStates() {
+        //keyDown = new boolean[4];
+        keyMap = new HashMap<Integer, Boolean>();
+    }
+    
+    public boolean getKey(int keyCode) {
+        boolean result = false;
+        if(keyMap.get(keyCode) != null)
+            result = true;
+        return result;
     }
     
     public boolean getKeyUp(){
-        return keyDown[kUp];
+        return getKey(Key.UP.keyCode);
     }
     
     public boolean getKeyDown(){
-        return keyDown[kDown];
+        return getKey(Key.DOWN.keyCode);
     }
     
     public boolean getKeyLeft(){
-        return keyDown[kLeft];
+        return getKey(Key.LEFT.keyCode);
     }
     
     public boolean getKeyRight(){
-        return keyDown[kRight];
+        return getKey(Key.RIGHT.keyCode);
     }
     
-    public void setKey(int index, boolean state){
-        keyDown[index] = state;
+    public void setKey(int keyCode, boolean state){
+        keyMap.put(keyCode, state);
     }
     
     public void setKeyUp(boolean state){
-        setKey(kUp, state);
+        setKey(Key.UP.keyCode, state);
     }
     
     public void setKeyDown(boolean state){
-        setKey(kDown, state);
+        setKey(Key.DOWN.keyCode, state);
     }
     
     public void setKeyLeft(boolean state){
-        setKey(kLeft, state);
+        setKey(Key.LEFT.keyCode, state);
     }
     
     public void setKeyRight(boolean state){
-        setKey(kRight, state);
+        setKey(Key.RIGHT.keyCode, state);
     }  
 }
