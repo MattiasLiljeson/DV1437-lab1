@@ -49,7 +49,7 @@ public class GameFrame extends JFrame{
 
 	@Override
 	public void paint(Graphics g) {
-		super.paint(g);
+        super.paint(g);
 		colors.paintIcon(gamePanel, g, 0, 0);
 		
 		for(CarUpdate update : carUpdates) {

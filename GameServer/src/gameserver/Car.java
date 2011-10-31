@@ -6,6 +6,7 @@ package gameserver;
 import common.CarUpdate;
 import common.KeyStates;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -16,6 +17,7 @@ public class Car {
     public static final double FACTOR_BREAK = 10;
     public static final double FACTOR_ACC = 10;
     public static final double FACTOR_TURN = 10;
+    public static final double FACTOR_BASE_FRICTION = 2;
     
     private KeyStates keyStates;
     private Point.Double pos;
@@ -52,7 +54,13 @@ public class Car {
         this.keyStates = keyStates;
     }
     
-    public void update(int fps){
+    public void update(int fps, BufferedImage frictionMaskBuffImg){
+        // Friction
+        // Sample friction from friction mask in the raceCourse
+        Color frictionColor = new Color(frictionMaskBuffImg.getRGB((int)pos.x, (int)pos.y));
+        double friction = FACTOR_BASE_FRICTION + (frictionColor.getBlue()/50.0);
+        speed -= friction;
+        
         // Steering
         // Counterclockwise, as the unit circle
         if(keyStates.getKeyLeft()){
@@ -62,7 +70,7 @@ public class Car {
             direction += FACTOR_TURN;
         }
         
-        // Acceleration / deaceleration
+        // Acceleration / deacceleration
         if(keyStates.getKeyUp()){
             speed += FACTOR_ACC;
         }
