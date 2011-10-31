@@ -3,7 +3,7 @@
  */
 package client;
 
-import common.Car;
+import common.CarUpdate;
 import common.KeyStates;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -21,14 +21,14 @@ import javax.swing.JPanel;
  */
 public class GameFrame extends JFrame{
     private KeyStates keyStates;
-	private Car[] cars;
+	private CarUpdate[] cars;
 	private JPanel gamePanel;
 	private int mapW, mapH;
 	ImageIcon colors;
 	
     GameFrame(ImageIcon colors){
         keyStates = new KeyStates();
-		cars = new Car[0]; //create with size zero to avoid needing to check for null everywhere. (cars is inited with each message from server)
+		cars = new CarUpdate[0]; //create with size zero to avoid needing to check for null everywhere. (cars is inited with each message from server)
 		this.colors = colors;
 		
 		//init the GUI components

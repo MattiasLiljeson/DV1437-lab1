@@ -4,8 +4,10 @@
 package racecourseserver;
 
 import common.*;
+import java.awt.Rectangle;
 import java.io.*;
 import java.net.*;
+import javax.swing.ImageIcon;
 
 
 /**
@@ -36,7 +38,14 @@ public class RaceCourseServer {
         
         channel = new Channel(COMM_PORT);
         channel.startServer();
-        raceCourse = RaceCourse.getInstance();
+        ImageIcon raceCourseImg = new ImageIcon("../res/level1_colors.png");
+        ImageIcon frictionMaskImg = new ImageIcon("../res/level1_frictionmask.png");
+        Rectangle[] checkpoints = new Rectangle[4];
+        checkpoints[0] = new Rectangle(250, 0, 1, 250);
+        checkpoints[1] = new Rectangle(0, 300, 250, 1);
+        checkpoints[2] = new Rectangle(400, 380, 1, 220);
+        checkpoints[3] = new Rectangle(550, 300, 250, 1);
+        raceCourse = new RaceCourse(raceCourseImg, frictionMaskImg, checkpoints);
     }
     
     public void run(){

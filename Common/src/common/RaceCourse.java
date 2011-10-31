@@ -14,13 +14,13 @@ import javax.swing.ImageIcon;
  */
 public class RaceCourse implements Serializable{
     public ImageIcon raceCourseImg;
-    public ImageIcon speedMaskImg;
+    public ImageIcon frictionMaskImg;
     public Rectangle[] checkpoints;
     
     
-    public RaceCourse(ImageIcon raceCourseImg, ImageIcon speedMaskImg, Rectangle[] checkpoints){
+    public RaceCourse(ImageIcon raceCourseImg, ImageIcon frictionMaskImg, Rectangle[] checkpoints){
         this.raceCourseImg = raceCourseImg;
-        this.speedMaskImg = speedMaskImg;
+        this.frictionMaskImg = frictionMaskImg;
         this.checkpoints = checkpoints;
     }
     

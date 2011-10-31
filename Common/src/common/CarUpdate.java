@@ -13,13 +13,13 @@ import java.io.Serializable;
  *
  * @author Robinerd
  */
-public class Car implements Serializable{
+public class CarUpdate implements Serializable{
 	public Point.Double position; //relative to container gui component's origin
 	public Point.Double velocity; // Represents velocity as a 2D vector
 	public double rotation; //angle in radians
 	public Color color;
 
-	public Car(Double position, double rotation, Color color) {
+	public CarUpdate(Double position, double rotation, Color color) {
 		this.position = position;
 		this.rotation = rotation;
 		this.color = color;

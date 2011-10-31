@@ -45,11 +45,9 @@ public class Client {
 		introGUI = null;
 		
         channel = new Channel(hostname, PORT_RCS);
-        //fetchRaceCourse(hostname, PORT_RCS);
-		
-		//TODO: images should be fetched from server
-		ImageIcon colors = new ImageIcon("../res/level1_colors.png");
-		gameGUI = new GameFrame(colors);
+        fetchRaceCourse(hostname, PORT_RCS);
+        ImageIcon raceCourseImg = raceCourse.raceCourseImg;
+        gameGUI = new GameFrame(raceCourseImg);
         
         channel = new Channel(hostname, PORT_GS);
         if(channel.connect()){
