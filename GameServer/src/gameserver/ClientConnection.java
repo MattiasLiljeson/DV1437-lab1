@@ -4,7 +4,6 @@
 package gameserver;
 
 import common.*;
-import java.io.*;
 import java.net.*;
 
 /**

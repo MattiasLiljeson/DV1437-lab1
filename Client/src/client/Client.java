@@ -4,8 +4,6 @@
 package client;
 
 import common.*;
-import java.io.*;
-import java.net.*;
 import javax.swing.ImageIcon;
 
 /**
