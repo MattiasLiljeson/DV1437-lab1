@@ -11,10 +11,10 @@ import java.io.Serializable;
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
 public class RaceUpdate implements Serializable{
-    public CarUpdate[] cars;
+    public CarUpdate[] carUpdates;
 
     public RaceUpdate(CarUpdate[] cars) {
-		this.cars = cars;
+		this.carUpdates = cars;
     }
     
 }

@@ -44,7 +44,7 @@ public class GameFrame extends JFrame{
     }
     
     public void update(RaceUpdate raceUpdate){
-        cars = raceUpdate.cars;
+        cars = raceUpdate.carUpdates;
     }
 
 	@Override
