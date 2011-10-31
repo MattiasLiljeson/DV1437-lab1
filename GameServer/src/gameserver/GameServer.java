@@ -4,8 +4,12 @@
 package gameserver;
 
 import common.*;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -42,7 +46,14 @@ public class GameServer {
         
         // Fetch racecourse
         // TODO: Remove hard coding of host and port below
-        RaceCourse raceCourse = fetchRaceCourse("localhost", 5678); 
+        RaceCourse raceCourse = fetchRaceCourse("localhost", 5678);
+        
+        // TODO: isolate ugly code below
+        Image img = raceCourse.frictionMaskImg.getImage();
+        BufferedImage buffImg = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+        Graphics g = buffImg.createGraphics();
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
         
         // Enter main loop
         long prevTime = System.currentTimeMillis();
@@ -63,7 +74,7 @@ public class GameServer {
                 for(Map.Entry<Integer, Car> entry : cars.entrySet()){
                     Car car = entry.getValue();
                     //if(cars.size() > 1) //TODO: add 2player limit
-                        car.update(pollingRate);
+                        car.update(pollingRate, buffImg);
                     carUpdatesArray[i] = car.getCarUpdate();
                     i++;
                 }
