@@ -65,8 +65,6 @@ public class IntroFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        
-        //frame.add(gamePanel, BorderLayout.NORTH);
     }
     
     public String getCarColor(){
@@ -77,11 +75,6 @@ public class IntroFrame {
         return hostname;
     }
     
-    public KeyStates getKeyStates(){
-        //TODO: update keystates
-        return gamePanel.getKeyStates();
-    }
-    
     public String getPlayerName(){
         return playerName;
     }
@@ -89,10 +82,6 @@ public class IntroFrame {
 //    public boolean isReadyToPlay(){
 //        return readyToPlay;
 //    }
-    
-    public void update(RaceUpdate raceUpdate){
-        //TODO: Update panel. Draw latest info
-    }
     
     // !WARNING!
     // ---! EVIL HACK BELOW !---

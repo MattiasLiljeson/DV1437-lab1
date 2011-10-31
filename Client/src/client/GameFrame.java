@@ -5,6 +5,7 @@ package client;
 
 import common.KeyStates;
 import java.awt.event.KeyEvent;
+import common.RaceUpdate;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
@@ -19,6 +20,11 @@ public class GameFrame extends JPanel{
         keyStates = new KeyStates();
     }
     
+    public void update(RaceUpdate raceUpdate){
+        //TODO: Update panel. Draw latest info.
+    }
+	
+	//TODO: implement or gtfo
     public KeyStates getKeyStates(){
         return keyStates;
     }

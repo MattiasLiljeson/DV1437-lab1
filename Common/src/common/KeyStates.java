@@ -13,8 +13,7 @@ import java.util.Map;
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
 public class KeyStates implements Serializable{
-    
-    Map<Integer, Boolean> keyMap;
+	Map<Integer, Boolean> keyMap;
     static enum Key {
         UP(KeyEvent.VK_UP), DOWN(KeyEvent.VK_DOWN), LEFT(KeyEvent.VK_LEFT), RIGHT(KeyEvent.VK_RIGHT);
 
