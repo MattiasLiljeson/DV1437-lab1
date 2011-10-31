@@ -4,16 +4,17 @@
 package client;
 
 import common.KeyStates;
+import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
 /**
  *
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
-public class GamePanel extends JPanel{
+public class GameFrame extends JPanel{
     private KeyStates keyStates;
     
-    GamePanel(){
+    GameFrame(){
         keyStates = new KeyStates();
     }
     

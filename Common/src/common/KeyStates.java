@@ -10,7 +10,13 @@ import java.io.Serializable;
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
 public class KeyStates implements Serializable{
-    
+	
+	static enum Key {
+		UP, DOWN, LEFT, RIGHT;
+		
+		Key(byte keyCode)
+	}
+	
     static final int kUp = 0, kDown = 1, kLeft = 2, kRight = 3;
     
     boolean[] keyDown;    

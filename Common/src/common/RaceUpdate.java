@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class RaceUpdate implements Serializable{
     private Point[] positions;
-    private Color[] colors;
+    private Color[] colors; //TODO: do not send every frame
     private int numCars;
 
     public RaceUpdate(int totCars) {

@@ -17,7 +17,8 @@ public class Client {
     public final static int PORT_GS = 5679;
     
     private RaceCourse raceCourse;
-    private GUI gui;
+    private IntroFrame introGUI;
+	private GameFrame gameGUI;
     private Channel channel;
     
     /**
@@ -29,15 +30,15 @@ public class Client {
     }
     
     public void run(){
-        gui = new GUI();
+        introGUI = new IntroFrame();
         //while(!gui.isReadyToPlay()){
             // Wait for user to press the "Play!" button
         //}
-        gui.doWait();
+        introGUI.doWait();
         
-        String hostname = gui.getHostname();
-        String playerName = gui.getPlayerName();
-        String carColor = gui.getCarColor();
+        String hostname = introGUI.getHostname();
+        String playerName = introGUI.getPlayerName();
+        String carColor = introGUI.getCarColor();
         
         channel = new Channel(hostname, PORT_RCS);
         fetchRaceCourse(hostname, PORT_RCS);
@@ -72,12 +73,12 @@ public class Client {
             object = channel.readObject();
             if( object != null){
                 if(object instanceof RaceUpdate){
-                    gui.update((RaceUpdate)object);
+                    introGUI.update((RaceUpdate)object);
                     System.out.println("RaceUpdate received");
                 }
                 else if(object instanceof KeyStatesReq){
                     System.out.println("KeyStatesReq received");
-                    KeyStates keyStates =  gui.getKeyStates();
+                    KeyStates keyStates =  introGUI.getKeyStates();
                     channel.sendObject(keyStates);
                 }
             }

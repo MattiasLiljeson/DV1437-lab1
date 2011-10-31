@@ -10,12 +10,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
- *
+ * Intro frame shown when starting the game
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
-public class GUI {
-    public final static int START_PANEL = 0;
-    public final static int GAME_PANEL = 1;
+public class IntroFrame {
     
     private boolean readyToPlay;
     private String playerName;
@@ -24,8 +22,6 @@ public class GUI {
     
     // GUI elements
     private JFrame frame;
-    
-    // Panel shown when starting the game
     private JPanel startPanel;
     private JTextField playerNameField;
     private JTextField hostnameField;
@@ -33,13 +29,8 @@ public class GUI {
     private JButton startGameBtn;
     private JLabel[] labels;
     
-    // Panel shown when playing
-    private GamePanel gamePanel;
-    
-    private int panel;
-    
-    public GUI(){
-        // Setup the start panel 
+    public IntroFrame(){
+        // Setup and init frame components -------------------------------------
         labels = new JLabel[3];
         GridLayout layout = new GridLayout(4,2);
         layout.setHgap(5);
@@ -65,9 +56,6 @@ public class GUI {
         startGameBtn = new JButton("Play!");
         startGameBtn.addActionListener(new buttonListener());
         startPanel.add(startGameBtn);
-        
-        // Setup the game panel
-        gamePanel = new GamePanel();
         
         frame = new JFrame("bilkul");
         Container pane = frame.getContentPane();
