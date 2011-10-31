@@ -9,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import common.RaceUpdate;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -21,14 +20,15 @@ import javax.swing.JPanel;
  */
 public class GameFrame extends JFrame{
     private KeyStates keyStates;
-	private CarUpdate[] cars;
+	private CarUpdate[] carUpdates;
 	private JPanel gamePanel;
 	private int mapW, mapH;
-	ImageIcon colors;
+	private ImageIcon colors;
+	private int carW = 10, carH = 15;
 	
     GameFrame(ImageIcon colors){
         keyStates = new KeyStates();
-		cars = new CarUpdate[0]; //create with size zero to avoid needing to check for null everywhere. (cars is inited with each message from server)
+		carUpdates = new CarUpdate[0]; //create with size zero to avoid needing to check for null everywhere. (cars is inited with each message from server)
 		this.colors = colors;
 		
 		//init the GUI components
@@ -44,13 +44,19 @@ public class GameFrame extends JFrame{
     }
     
     public void update(RaceUpdate raceUpdate){
-        cars = raceUpdate.carUpdates;
+        carUpdates = raceUpdate.carUpdates;
     }
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		colors.paintIcon(gamePanel, g, 0, 0);
+		
+		for(CarUpdate update : carUpdates) {
+			g.setColor(update.color);
+			//TODO: ta hänsyn till rotation
+			g.fillRect((int) (update.position.x - carW/2.0), (int) (update.position.y - carH/2.0), carW, carH);
+		}
 	}
 	
 	//TODO: implement or gtfo
