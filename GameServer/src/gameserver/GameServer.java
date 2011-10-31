@@ -31,32 +31,44 @@ public class GameServer {
     }
     
     public void run(){
-        //Create clientHandlerThread thread to handle connection with clients
+        // Create clientHandlerThread thread to handle connection with clients
         ClientHandler clientHandler = new ClientHandler(this);
         Thread clientHandlerThread = new Thread(clientHandler);
         clientHandlerThread.start();
         
-        //Create ExitListener thread to listen to exit message from std input
+        // Create ExitListener thread to listen to exit message from std input
         Thread exitListenerThread = new Thread(new ExitListener());
         exitListenerThread.start();
         
-        //Enter main loop
+        // Fetch racecourse
+        // TODO: Remove hard coding of host and port below
+        RaceCourse raceCourse = fetchRaceCourse("localhost", 5678); 
+        
+        // Enter main loop
         long prevTime = System.currentTimeMillis();
         while(!done){
             //Poll clients, update, send new positions to clients
+            
             //DEBUG: test algorithm
             double tmp1 = System.currentTimeMillis() - prevTime;
             double tmp2 = (1000/pollingRate);
             boolean tmp3 = (prevTime - System.currentTimeMillis()) > (1000/pollingRate);
+            //!DEBUG
+            
             if((System.currentTimeMillis() - prevTime) > (1000/pollingRate)){
                 clientHandler.pollClients();
                 
-                RaceUpdate update = new RaceUpdate(cars.size());
+                CarUpdate[] carUpdatesArray = new CarUpdate[cars.size()];
+                int i = 0;
                 for(Map.Entry<Integer, Car> entry : cars.entrySet()){
                     Car car = entry.getValue();
-                    car.update(pollingRate);
-                    update.addCar(car.getPosition(), car.getColor());
+                    //if(cars.size() > 1) //TODO: add 2player limit
+                        car.update(pollingRate);
+                    carUpdatesArray[i] = car.getCarUpdate();
+                    i++;
                 }
+                
+                RaceUpdate update = new RaceUpdate(carUpdatesArray);
                 clientHandler.sendRaceUpdate(update);
             }
         }
@@ -92,6 +104,25 @@ public class GameServer {
             }
         }
         
+    }
+    public RaceCourse fetchRaceCourse(String hostname, int port){
+        //TODO: remove hard coding below
+        Channel channel = new Channel(hostname, port);
+        RaceCourse raceCourse;
+        boolean success = true;
+        channel.connect();
+        channel.openStreams();
+        raceCourse = (RaceCourse)channel.readObject();
+        
+        if(raceCourse != null){
+            System.out.println("Received payload:");
+            System.out.println(raceCourse.toString());
+            success = true;
+        }
+        
+        channel.closeStreams();
+        channel.closeSockets();
+        return raceCourse;
     }
     
 }

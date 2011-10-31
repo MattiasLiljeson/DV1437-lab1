@@ -3,6 +3,7 @@
  */
 package gameserver;
 
+import common.CarUpdate;
 import common.KeyStates;
 import java.awt.*;
 
@@ -17,23 +18,33 @@ public class Car {
     public static final double FACTOR_TURN = 10;
     
     private KeyStates keyStates;
-    private Point pos;
+    private Point.Double pos;
     private double direction;
     private double speed;
     private Color color;
+    private CarUpdate carUpdate;
     
-    public Car(){
+    public Car(double posX, double posY, double direction){
         keyStates = new KeyStates();
+        pos = new Point.Double(posX, posY);
+        this.direction = direction;
         
         //TODO, fix color
         color = Color.BLUE;
+        carUpdate = new CarUpdate(pos, direction, color);
+    }
+    
+    public CarUpdate getCarUpdate() {
+        carUpdate.position = pos;
+        carUpdate.rotation = direction;
+        return carUpdate;
     }
     
     public Color getColor(){
         return color;
     }
     
-    public Point getPosition(){
+    public Point.Double getPosition(){
         return pos;
     }
     
@@ -59,8 +70,8 @@ public class Car {
             speed -= FACTOR_BREAK;
         }
         
-        double x = Math.cos(direction)*speed / fps;
-        double y = Math.cos(direction)*speed / fps;
-        pos.translate((int)x, (int)y);
+        double dx = Math.cos(direction)*speed / fps;
+        double dy = Math.sin(direction)*speed / fps;
+        pos.setLocation(pos.getX()+dx, pos.getY()+dy);
     }
 }
