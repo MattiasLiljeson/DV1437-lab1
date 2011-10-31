@@ -59,7 +59,6 @@ public class GameServer {
                 }
                 clientHandler.sendRaceUpdate(update);
             }
-            
         }
         System.exit(0);
     }

@@ -13,7 +13,7 @@ import javax.swing.*;
  * Intro frame shown when starting the game
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
-public class IntroFrame {
+public class IntroFrame extends JFrame{
     
     private boolean readyToPlay;
     private String playerName;
@@ -21,7 +21,6 @@ public class IntroFrame {
     private String carColor;
     
     // GUI elements
-    private JFrame frame;
     private JPanel startPanel;
     private JTextField playerNameField;
     private JTextField hostnameField;
@@ -30,6 +29,8 @@ public class IntroFrame {
     private JLabel[] labels;
     
     public IntroFrame(){
+		super("bilkul");
+		
         // Setup and init frame components -------------------------------------
         labels = new JLabel[3];
         GridLayout layout = new GridLayout(4,2);
@@ -57,14 +58,14 @@ public class IntroFrame {
         startGameBtn.addActionListener(new buttonListener());
         startPanel.add(startGameBtn);
         
-        frame = new JFrame("bilkul");
-        Container pane = frame.getContentPane();
+		//init and show the frame ----------------------------------------------
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container pane = getContentPane();
         BorderLayout frameLayout = new BorderLayout(5, 5);
-        frame.setLayout(frameLayout);
-        frame.add(startPanel,BorderLayout.CENTER);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        setLayout(frameLayout);
+        pane.add(startPanel,BorderLayout.CENTER);
+        pack();
+        setVisible(true);
     }
     
     public String getCarColor(){

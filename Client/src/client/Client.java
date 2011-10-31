@@ -6,6 +6,7 @@ package client;
 import common.*;
 import java.io.*;
 import java.net.*;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -40,8 +41,15 @@ public class Client {
         String playerName = introGUI.getPlayerName();
         String carColor = introGUI.getCarColor();
         
+		introGUI.dispose();
+		introGUI = null;
+		
         channel = new Channel(hostname, PORT_RCS);
-        fetchRaceCourse(hostname, PORT_RCS);
+        //fetchRaceCourse(hostname, PORT_RCS);
+		
+		//TODO: images should be fetched from server
+		ImageIcon colors = new ImageIcon("../res/level1_colors.png");
+		gameGUI = new GameFrame(colors);
         
         channel = new Channel(hostname, PORT_GS);
         if(channel.connect()){
