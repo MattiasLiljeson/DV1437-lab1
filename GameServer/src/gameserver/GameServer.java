@@ -76,22 +76,21 @@ public class GameServer {
             if(timeSinceLastFrame > timePerFrame){
                 clientHandler.pollClients();
                 
-				ArrayList<CarUpdate> carUpdates = new ArrayList<CarUpdate>(cars.size());
+				HashMap<Integer, CarUpdate> carUpdates = new HashMap<Integer, CarUpdate>();
 				int i = 0;
 				synchronized(lockCars) {
-					for(Car car : cars.values()){
+					for(Map.Entry<Integer, Car> entry : cars.entrySet()){
+						Car car = entry.getValue();
 						if(car == null)
 							continue;
 						
 						//if(cars.size() > 1) //TODO: add 2player limit
-							car.update(timeSinceLastFrame, buffImg);
-						carUpdates.add(car.getCarUpdate());
+							car.update(timeSinceLastFrame, buffImg, raceCourse.checkpoints);
+						carUpdates.put(entry.getKey(), car.getCarUpdate());
 						i++;
 					}
 				}
-				CarUpdate[] carUpdatesArray = new CarUpdate[carUpdates.size()];
-				carUpdates.toArray(carUpdatesArray);
-				RaceUpdate update = new RaceUpdate(carUpdatesArray);
+				RaceUpdate update = new RaceUpdate(carUpdates);
 				clientHandler.sendRaceUpdate(update);
                 
 				//removed stuff that was flagged for removal
@@ -109,7 +108,7 @@ public class GameServer {
 			cars.put(id,car);
 		}
     }
-    
+			
 	public void flagCarForRemoval(int id) {
 		synchronized(lockCars) {
 			cars.put(id, null);

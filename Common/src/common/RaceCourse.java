@@ -4,6 +4,7 @@
 package common;
 
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 import java.io.Serializable;
 import javax.swing.ImageIcon;
 
@@ -15,10 +16,10 @@ import javax.swing.ImageIcon;
 public class RaceCourse implements Serializable{
     public ImageIcon raceCourseImg;
     public ImageIcon frictionMaskImg;
-    public Rectangle[] checkpoints;
+    public Line2D[] checkpoints;
     
     
-    public RaceCourse(ImageIcon raceCourseImg, ImageIcon frictionMaskImg, Rectangle[] checkpoints){
+    public RaceCourse(ImageIcon raceCourseImg, ImageIcon frictionMaskImg, Line2D[] checkpoints){
         this.raceCourseImg = raceCourseImg;
         this.frictionMaskImg = frictionMaskImg;
         this.checkpoints = checkpoints;

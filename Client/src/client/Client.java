@@ -41,8 +41,7 @@ public class Client {
 		introGUI = null;
 		
         raceCourse =  fetchRaceCourse(hostname, PORT_RCS);
-        ImageIcon raceCourseImg = raceCourse.raceCourseImg;
-        gameGUI = new GameFrame(raceCourseImg);
+        gameGUI = new GameFrame(raceCourse);
         
         channel = new Channel(hostname, PORT_GS);
         if(channel.connect()){

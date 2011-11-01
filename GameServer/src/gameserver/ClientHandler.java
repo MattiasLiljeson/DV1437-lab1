@@ -118,8 +118,10 @@ public class ClientHandler implements Runnable{
     public void sendRaceUpdate(RaceUpdate update){
         synchronized(this) {
             for(Integer clientID : clientConnections.keySet()){
-				if(clientConnections.get(clientID) != null)
+				update.clientID = clientID; //set the current clientID so that the client can know it's own ID
+				if(clientConnections.get(clientID) != null) {
 					clientConnections.get(clientID).sendRaceUpdate(update);
+				}
             }
         }
     }

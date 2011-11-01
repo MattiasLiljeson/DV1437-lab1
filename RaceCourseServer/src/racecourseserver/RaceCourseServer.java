@@ -5,6 +5,7 @@ package racecourseserver;
 
 import common.*;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 import java.io.*;
 import java.net.*;
 import javax.swing.ImageIcon;
@@ -40,11 +41,10 @@ public class RaceCourseServer {
         channel.startServer();
         ImageIcon raceCourseImg = new ImageIcon("../res/level1_colors.png");
         ImageIcon frictionMaskImg = new ImageIcon("../res/level1_frictionmask.png");
-        Rectangle[] checkpoints = new Rectangle[4];
-        checkpoints[0] = new Rectangle(250, 0, 1, 250);
-        checkpoints[1] = new Rectangle(0, 300, 250, 1);
-        checkpoints[2] = new Rectangle(400, 380, 1, 220);
-        checkpoints[3] = new Rectangle(550, 300, 250, 1);
+        Line2D[] checkpoints = new Line2D[3];
+		checkpoints[0] = new Line2D.Double(640,100,530,220);
+		checkpoints[1] = new Line2D.Double(440,420,400,540);
+		checkpoints[2] = new Line2D.Double(85,280,210,270);
         raceCourse = new RaceCourse(raceCourseImg, frictionMaskImg, checkpoints);
     }
     

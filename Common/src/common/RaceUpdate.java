@@ -4,16 +4,18 @@
 package common;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Container for data regarding the race. Such as the cars positions etc.
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
 public class RaceUpdate implements Serializable{
-    public CarUpdate[] carUpdates;
-
-    public RaceUpdate(CarUpdate[] cars) {
-		this.carUpdates = cars;
-    }
-    
+    public HashMap<Integer, CarUpdate> carUpdates;
+	public int clientID;
+	
+	public RaceUpdate(HashMap<Integer, CarUpdate> carUpdates) {
+		this.carUpdates = carUpdates;
+	}
+	
 }

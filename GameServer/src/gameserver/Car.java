@@ -6,6 +6,7 @@ package gameserver;
 import common.CarUpdate;
 import common.KeyStates;
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -25,6 +26,7 @@ public class Car {
     private double speed;
     private Color color;
     private CarUpdate carUpdate;
+	private int nextCheckpoint = 0;
     
     public Car(Color color){
         this(100,100,100,color);
@@ -42,13 +44,14 @@ public class Car {
         this.color = color;
 		
         keyStates = new KeyStates();
-        carUpdate = new CarUpdate(posX, posY, direction, color);
+        carUpdate = new CarUpdate(posX, posY, direction, color, 0);
     }
     
     public CarUpdate getCarUpdate() {
 		carUpdate.posX = posX;
 		carUpdate.posY = posY;
         carUpdate.rotation = direction;
+		carUpdate.nextCheckpoint = nextCheckpoint;
         return carUpdate;
     }
     
@@ -68,7 +71,8 @@ public class Car {
         this.keyStates = keyStates;
     }
     
-    public void update(double dt, BufferedImage frictionMaskBuffImg){
+	//TODO: pass image and checkpoints in constructor only
+    public void update(double dt, BufferedImage frictionMaskBuffImg, Line2D[] checkpoints){
 		//----------------------------------------------------------------------
 		// Friction
 		
@@ -111,8 +115,25 @@ public class Car {
         // Apply the speed in current direction to change position
         posX += Math.cos(direction)*speed * dt;
         posY += Math.sin(direction)*speed * dt;
+	
+		//----------------------------------------------------------------------
+		// Update checkpoint data
+		if(isIntersectingCheckpoint(checkpoints[nextCheckpoint])) {
+			nextCheckpoint++;
+			if(nextCheckpoint == checkpoints.length) {
+				nextCheckpoint = 0;
+			}
+		}
     }
-    
+
+	public int getNextCheckpoint() {
+		return nextCheckpoint;
+	}
+    	
+	public boolean isIntersectingCheckpoint(Line2D checkpoint) {
+		return checkpoint.intersects(posX, posY, 20, 20);
+	}
+	
     public void setSpawnData(double direction, double posX, double posY){
         this.direction = direction;
         this.posX = posX;
