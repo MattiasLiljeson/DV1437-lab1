@@ -31,9 +31,9 @@ public class KeyStates implements Serializable{
     }
     
     public boolean getKey(int keyCode) {
-        boolean result = false;
-        if(keyMap.get(keyCode) != null)
-            result = true;
+        Boolean result = keyMap.get(keyCode);
+        if(result == null) //if user hasn't touched the key it will be undefined in the hashmap. Assume it is not pressed
+            result = false;
         return result;
     }
     

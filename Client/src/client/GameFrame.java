@@ -20,6 +20,7 @@ import javax.swing.JPanel;
  */
 public class GameFrame extends JFrame{
     private KeyStates keyStates;
+    private KeyStateListener keyListener;
 	private CarUpdate[] carUpdates;
 	private JPanel gamePanel;
 	private int mapW, mapH;
@@ -28,6 +29,7 @@ public class GameFrame extends JFrame{
 	
     GameFrame(ImageIcon colors){
         keyStates = new KeyStates();
+        keyListener = new KeyStateListener();
 		carUpdates = new CarUpdate[0]; //create with size zero to avoid needing to check for null everywhere. (cars is inited with each message from server)
 		this.colors = colors;
 		
@@ -37,6 +39,7 @@ public class GameFrame extends JFrame{
 		add(gamePanel);
 		mapW = colors.getIconWidth();
 		mapH = colors.getIconHeight();
+        addKeyListener(keyListener);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(mapW, mapH));
 		setSize(mapW, mapH);
@@ -60,7 +63,6 @@ public class GameFrame extends JFrame{
 		}
 	}
 	
-	//TODO: implement or gtfo
     public KeyStates getKeyStates(){
         return keyStates;
     }
@@ -69,7 +71,7 @@ public class GameFrame extends JFrame{
      * Inner class which listens to key events and saves them to the local 
      * KeyStates instance.
      */
-    private class keyListener implements KeyListener {
+    private class KeyStateListener implements KeyListener {
 
         @Override
         public void keyTyped(KeyEvent e) {

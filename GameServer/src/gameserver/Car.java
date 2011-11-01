@@ -107,6 +107,6 @@ public class Car {
 		
         posX += Math.cos(direction)*speed * dt;
         posY += Math.sin(direction)*speed * dt;
-		posY += 50 * dt;
+		//posY += 50 * dt;
     }
 }
