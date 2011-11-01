@@ -5,7 +5,6 @@
 package common;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.io.Serializable;
 
 /**
@@ -13,13 +12,15 @@ import java.io.Serializable;
  * @author Robinerd
  */
 public class CarUpdate implements Serializable{
-	public Point.Double position; //relative to container gui component's origin
+	public double posX; //relative to container gui component's origin
+	public double posY;
 	public double rotation; //angle in radians
 	public Color color;
 
-	public CarUpdate(Point.Double position, double rotation, Color color) {
-            this.position = position;
-            this.rotation = rotation;
+	public CarUpdate(double posX, double posY, double rotation, Color color) {
+            this.posX = posX;
+			this.posY = posY;
+			this.rotation = rotation;
             this.color = color;
 	}
 }

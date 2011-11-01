@@ -4,6 +4,7 @@
 package gameserver;
 
 import common.*;
+import java.awt.Color;
 import java.net.*;
 import java.util.ArrayList;
 
@@ -47,8 +48,9 @@ public class ClientHandler implements Runnable{
                 clientConnections.add(clientConn);
                 
 				// TODO: Add a car for the client, fetch car color etc
-				Car clientCar = new Car(400,200,0);
-                server.addCar(nextClientID, clientCar);
+				Car clientCar = new Car(400,200,0, Color.red);
+				server.addCar(nextClientID, clientCar);
+				
 				
 				//increase the id counter to prepare for the next client connection
                 nextClientID++;

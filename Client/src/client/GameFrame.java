@@ -56,7 +56,7 @@ public class GameFrame extends JFrame{
 		for(CarUpdate update : carUpdates) {
 			g.setColor(update.color);
 			//TODO: ta hänsyn till rotation
-			g.fillRect((int) (update.position.x - carW/2.0), (int) (update.position.y - carH/2.0), carW, carH);
+			g.fillRect((int) (update.posX - carW/2.0), (int) (update.posY - carH/2.0), carW, carH);
 		}
 	}
 	

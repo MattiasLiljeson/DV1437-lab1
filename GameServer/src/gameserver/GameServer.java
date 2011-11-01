@@ -15,7 +15,7 @@ import java.util.*;
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
 public class GameServer {
-    private int pollingRate = 60;
+    private double framesPerSecond = 1337;
     private Map<Integer,Car> cars;
     private boolean done = false;
     
@@ -56,16 +56,26 @@ public class GameServer {
         
         // Enter main loop
         long prevTime = System.currentTimeMillis();
-        while(!done){
+		double timeSinceLastFrame = 0;
+		double timePerFrame = 1.0 / framesPerSecond;
+		int frameCount = 0;
+		long startTime = System.currentTimeMillis();
+        while(System.currentTimeMillis() - startTime < 5000){
+			
             //Poll clients, update, send new positions to clients
             
+			/*
             //DEBUG: test algorithm
             double tmp1 = System.currentTimeMillis() - prevTime;
             double tmp2 = (1000/pollingRate);
             boolean tmp3 = (prevTime - System.currentTimeMillis()) > (1000/pollingRate);
             //!DEBUG
-            
-            if((System.currentTimeMillis() - prevTime) > (1000/pollingRate)){
+            */
+			long currentTime = System.currentTimeMillis();
+			timeSinceLastFrame += (currentTime - prevTime)/1000.0;
+			prevTime = currentTime;
+			
+            if(timeSinceLastFrame > timePerFrame){
                 clientHandler.pollClients();
                 
                 CarUpdate[] carUpdatesArray = new CarUpdate[cars.size()];
@@ -73,15 +83,19 @@ public class GameServer {
                 for(Map.Entry<Integer, Car> entry : cars.entrySet()){
                     Car car = entry.getValue();
                     //if(cars.size() > 1) //TODO: add 2player limit
-                        car.update(pollingRate, buffImg);
+                        car.update(timeSinceLastFrame, buffImg);
                     carUpdatesArray[i] = car.getCarUpdate();
                     i++;
                 }
                 
                 RaceUpdate update = new RaceUpdate(carUpdatesArray);
                 clientHandler.sendRaceUpdate(update);
+				
+				frameCount++;
+				timeSinceLastFrame -= timePerFrame;
             }
         }
+		System.out.println(frameCount / 5.0);
         System.exit(0);
     }
 	

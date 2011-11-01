@@ -33,8 +33,9 @@ public class ClientConnection implements Runnable{
             keyStates = (KeyStates)channel.readObject();
 
             if(keyStates != null){
-                System.out.println("Received payload:");
-                System.out.println(keyStates.toString());
+                //System.out.println("Received payload:");
+                //System.out.println(keyStates.toString());
+				
                 //Send em' up to the top
                 clientHandler.updateKeyStates(id, keyStates);
             }
