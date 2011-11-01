@@ -7,6 +7,7 @@ import common.*;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.net.*;
+import java.util.Locale;
 
 /**
  *
@@ -85,8 +86,9 @@ public class ClientConnection implements Runnable{
         if(success){
             //Turn string to actual color
             Color color = null;
+            String colorAsString = clientData.carColor.toLowerCase();
             try {
-                Field field = Class.forName("java.awt.Color").getField(clientData.carColor);
+                Field field = Class.forName("java.awt.Color").getField(colorAsString);
                 color = (Color)field.get(null);
             } catch (Exception e) {
                 color = new Color(0); // Not defined. Use black as color
