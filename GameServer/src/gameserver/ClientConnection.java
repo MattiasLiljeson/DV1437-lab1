@@ -31,7 +31,7 @@ public class ClientConnection implements Runnable{
     public void run(){
         // Fetch info about the car color etc and create a car and add the
         // client to the clienthandler before entering the game loop.
-        done = initClientData();
+        done = !initClientData();
         
         // Enter main loop.
         KeyStates keyStates = null;
