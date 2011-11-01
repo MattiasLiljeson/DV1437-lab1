@@ -4,6 +4,8 @@
 package gameserver;
 
 import common.*;
+import java.awt.Color;
+import java.lang.reflect.Field;
 import java.net.*;
 
 /**
@@ -27,9 +29,12 @@ public class ClientConnection implements Runnable{
 
     @Override
     public void run(){
-        KeyStates keyStates = null;
+        // Fetch info about the car color etc and create a car and add the
+        // client to the clienthandler before entering the game loop.
+        done = initClientData();
         
-        //TODO: wait for InitClient message, create car, add to clientHandler.clientConnections and so on, before entering the loop
+        // Enter main loop.
+        KeyStates keyStates = null;
         while(!done){
             //Fetch keystates
             try{
@@ -37,19 +42,17 @@ public class ClientConnection implements Runnable{
             }catch(Channel.ConnectionLostException ex){
                 clientHandler.removeClient(id);
                 close();
+                done = true;
             }
 
             if(keyStates != null){
-                //System.out.println("Received payload:");
-                //System.out.println(keyStates.toString());
-				
                 //Send em' up to the top
 				System.out.println("keystate up key: "+keyStates.getKeyUp());
                 clientHandler.updateKeyStates(id, keyStates);
             }
         }
     }
-
+    
     public boolean close(){
         boolean success = true;
         done = true;
@@ -70,6 +73,32 @@ public class ClientConnection implements Runnable{
         return success;
     }
 
+    public boolean initClientData(){
+        boolean success = true;
+        ClientData clientData = null;
+        try{
+            clientData = (ClientData)channel.readObject();
+        }catch(Channel.ConnectionLostException ex){
+            close();
+            success = false;
+        }
+        
+        if(success){
+            //Turn string to actual color
+            Color color = null;
+            try {
+                Field field = Class.forName("java.awt.Color").getField(clientData.carColor);
+                color = (Color)field.get(null);
+            } catch (Exception e) {
+                color = new Color(0); // Not defined. Use black as color
+            }
+            
+            Car car = new Car(color);
+            clientHandler.addClient(id, this, car);
+        }
+        return success;
+    }
+    
     public boolean poll(){
         boolean result = false;
         try{

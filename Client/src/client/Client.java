@@ -36,9 +36,7 @@ public class Client {
         introGUI.doWait();
         
         String hostname = introGUI.getHostname();
-        String playerName = introGUI.getPlayerName();
-        String carColor = introGUI.getCarColor();
-        
+        ClientData clientData = new ClientData(introGUI.getPlayerName(),introGUI.getCarColor());
 		introGUI.dispose();
 		introGUI = null;
 		
@@ -49,7 +47,17 @@ public class Client {
         channel = new Channel(hostname, PORT_GS);
         if(channel.connect()){
             channel.openStreams();
-            gameLoop();
+            
+            boolean success = true;
+            try{
+                channel.sendObject(clientData);
+            }catch(Channel.ConnectionLostException ex){
+                System.out.println("Problem with the connection, couldn't send init message");
+                success = false;
+            }
+            
+            if(success)
+                gameLoop();
         }
     }
     

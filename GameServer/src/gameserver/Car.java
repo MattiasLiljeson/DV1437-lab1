@@ -26,6 +26,10 @@ public class Car {
     private Color color;
     private CarUpdate carUpdate;
     
+    public Car(Color color){
+        this(100,100,100,color);
+    }
+    
 	public Car(double posX, double posY, double direction)
 	{
 		this(posX, posY, direction, Color.blue);
@@ -108,5 +112,11 @@ public class Car {
         posX += Math.cos(direction)*speed * dt;
         posY += Math.sin(direction)*speed * dt;
 		//posY += 50 * dt;
+    }
+    
+    public void setSpawnData(double direction, double posX, double posY){
+        this.direction = direction;
+        this.posX = posX;
+        this.posY = posY;
     }
 }

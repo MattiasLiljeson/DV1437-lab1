@@ -49,15 +49,17 @@ public class ClientHandler implements Runnable{
                 ClientConnection clientConn = new ClientConnection(clientSock, this, nextClientID);
                 
                 //--------------------------------------------------------------
-                //TODO: break out this functionality into the clientConn thread which also waits for ClientInit message
-                synchronized(this) {
-                    clientConnections.put(nextClientID, clientConn);
-                }
+                // TODO: break out this functionality into the clientConn thread 
+                // which also waits for ClientInit message
+//                synchronized(this) {
+//                    clientConnections.put(nextClientID, clientConn);
+//                }
                 // TODO: Add a car for the client, fetch car color etc
-                Car clientCar = new Car(400,200,0, Color.red);
-                server.addCar(nextClientID, clientCar);
+//                Car clientCar = new Car(400,200,0, Color.red);
+//                server.addCar(nextClientID, clientCar);
 		
-                //increase the id counter to prepare for the next client connection
+                // Increase the id counter to prepare for the next client 
+                // connection
                 nextClientID++;
 				//--------------------------------------------------------------
                 Thread thread = new Thread(clientConn);
@@ -68,6 +70,18 @@ public class ClientHandler implements Runnable{
             System.out.println("Client has been served by ClientHandler. "
                     + "Now looking for new connections");
         }
+    }
+    
+    public boolean addClient(int id, ClientConnection conn, Car car){
+        boolean success = false;
+        synchronized(this) {
+            if(clientConnections.get(id) == null) {
+                server.addCar(id, car);
+                clientConnections.put(id, conn);
+                success = true;
+            }
+        }
+        return success;
     }
     
     public void pollClients(){
