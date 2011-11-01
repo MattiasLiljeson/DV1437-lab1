@@ -7,6 +7,7 @@ import common.*;
 import java.awt.Color;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -16,7 +17,7 @@ public class ClientHandler implements Runnable{
     public final static String SERVER_HOSTNAME = "localhost";
     public final static int COMM_PORT = 5679;
     //ServerSocket servSock;
-    private ArrayList<ClientConnection> clientConnections; // TODO: Change impl to Map?
+    private HashMap<Integer, ClientConnection> clientConnections; // must be a map, not ArrayList, since removing clients from an array list would fuck up id mapping.
     private Object lockClientConnections = new Object();
     private int nextClientID = 0; //Client ID counter. Increases with every connected client. Cannot use clients.size() since it decreases when clients are removed. We want a unique number.
     private GameServer server;
@@ -29,7 +30,7 @@ public class ClientHandler implements Runnable{
         channel = new Channel(COMM_PORT);
         
         this.server = server;
-        clientConnections = new ArrayList<ClientConnection>();
+        clientConnections = new HashMap<Integer, ClientConnection>();
         System.out.println("ClientHandler started");
     }
     
@@ -50,7 +51,7 @@ public class ClientHandler implements Runnable{
                 //--------------------------------------------------------------
                 //TODO: break out this functionality into the clientConn thread which also waits for ClientInit message
                 synchronized(this) {
-                    clientConnections.add(clientConn);
+                    clientConnections.put(nextClientID, clientConn);
                 }
                 // TODO: Add a car for the client, fetch car color etc
                 Car clientCar = new Car(400,200,0, Color.red);
@@ -71,8 +72,8 @@ public class ClientHandler implements Runnable{
     
     public void pollClients(){
         synchronized(this) {
-            for(ClientConnection client : clientConnections){
-                client.poll();
+            for(Integer clientID : clientConnections.keySet()){
+                clientConnections.get(clientID).poll();
             }
         }
     }
@@ -88,8 +89,8 @@ public class ClientHandler implements Runnable{
     
     public void sendRaceUpdate(RaceUpdate update){
         synchronized(this) {
-            for(ClientConnection client : clientConnections){
-                client.sendRaceUpdate(update);
+            for(Integer clientID : clientConnections.keySet()){
+                clientConnections.get(clientID).sendRaceUpdate(update);
             }
         }
     }

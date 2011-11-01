@@ -44,6 +44,7 @@ public class ClientConnection implements Runnable{
                 //System.out.println(keyStates.toString());
 				
                 //Send em' up to the top
+				System.out.println("keystate up key: "+keyStates.getKeyUp());
                 clientHandler.updateKeyStates(id, keyStates);
             }
         }

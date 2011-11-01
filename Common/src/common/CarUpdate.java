@@ -18,9 +18,9 @@ public class CarUpdate implements Serializable{
 	public Color color;
 
 	public CarUpdate(double posX, double posY, double rotation, Color color) {
-            this.posX = posX;
-			this.posY = posY;
-			this.rotation = rotation;
-            this.color = color;
+		this.posX = posX;
+		this.posY = posY;
+		this.rotation = rotation;
+		this.color = color;
 	}
 }
