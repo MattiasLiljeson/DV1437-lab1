@@ -34,8 +34,7 @@ public class GameFrame extends JFrame{
 		this.colors = colors;
 		
 		//init the GUI components
-		gamePanel = new JPanel();
-		gamePanel.setDoubleBuffered(true);
+		gamePanel = new GamePanel();
 		add(gamePanel);
 		mapW = colors.getIconWidth();
 		mapH = colors.getIconHeight();
@@ -49,24 +48,32 @@ public class GameFrame extends JFrame{
     
     public void update(RaceUpdate raceUpdate){
         carUpdates = raceUpdate.carUpdates;
-		repaint();
+		gamePanel.repaint();
     }
-
-	@Override
-	public void paint(Graphics g) {
-		colors.paintIcon(gamePanel, g, 0, 0);
-		
-		for(CarUpdate update : carUpdates) {
-			g.setColor(update.color);
-			//TODO: ta hänsyn till rotation
-			g.fillRect((int) (update.posX - carW/2.0), (int) (update.posY - carH/2.0), carW, carH);
-		}
-	}
 	
     public KeyStates getKeyStates(){
         return keyStates;
     }
     
+	
+	private class GamePanel extends JPanel {
+		
+		public GamePanel() {
+			setDoubleBuffered(true);
+		}
+		
+		@Override
+		public void paint(Graphics g) {
+			colors.paintIcon(this, g, 0, 0);
+
+			for(CarUpdate update : carUpdates) {
+				g.setColor(update.color);
+				//TODO: ta hänsyn till rotation
+				g.fillRect((int) (update.posX - carW/2.0), (int) (update.posY - carH/2.0), carW, carH);
+			}
+		}
+	}
+	
     /**
      * Inner class which listens to key events and saves them to the local 
      * KeyStates instance.
