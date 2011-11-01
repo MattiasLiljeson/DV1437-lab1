@@ -74,6 +74,15 @@ public class ClientHandler implements Runnable{
         }
     }
     
+    public boolean removeClient(int id) {
+        boolean result = false;
+        synchronized(this) {
+            if(clientConnections.remove(id) != null)
+                result = true;
+        }
+        return result;
+    }
+    
     public void sendRaceUpdate(RaceUpdate update){
         synchronized(this) {
             for(ClientConnection client : clientConnections){

@@ -42,8 +42,7 @@ public class Client {
 		introGUI.dispose();
 		introGUI = null;
 		
-        channel = new Channel(hostname, PORT_RCS);
-        fetchRaceCourse(hostname, PORT_RCS);
+        raceCourse =  fetchRaceCourse(hostname, PORT_RCS);
         ImageIcon raceCourseImg = raceCourse.raceCourseImg;
         gameGUI = new GameFrame(raceCourseImg);
         
@@ -54,36 +53,44 @@ public class Client {
         }
     }
     
-    public boolean fetchRaceCourse(String hostname, int port){
-        boolean success = true;
+    public RaceCourse fetchRaceCourse(String hostname, int port){
+        Channel channel = new Channel(hostname, port);
+        RaceCourse raceCourse;
         channel.connect();
         channel.openStreams();
-        raceCourse = (RaceCourse)channel.readObject();
-        
-        if(raceCourse != null){
-            //System.out.println("Received payload:");
-            //System.out.println(this.raceCourse.toString());
-            success = true;
+        try{
+            raceCourse = (RaceCourse)channel.readObject();
+        }catch(Channel.ConnectionLostException ex){
+            raceCourse = null;
         }
         
         channel.closeStreams();
         channel.closeSockets();
-        return success;
+        return raceCourse;
     }
 
     private void gameLoop() {
+        boolean done = false;
         Object object = null;
-        while(true){
-            object = channel.readObject();
+        while(!done){
+            try{
+                object = channel.readObject();
+            }catch(Channel.ConnectionLostException ex){
+                done = true;
+            }
+            
             if( object != null){
                 if(object instanceof RaceUpdate){
                     gameGUI.update((RaceUpdate)object);
-                    //System.out.println("RaceUpdate received");
                 }
                 else if(object instanceof KeyStatesReq){
                     //System.out.println("KeyStatesReq received");
                     KeyStates keyStates =  gameGUI.getKeyStates();
-                    channel.sendObject(keyStates);
+                    try{
+                        channel.sendObject(keyStates);
+                    }catch(Channel.ConnectionLostException ex){
+                        done = true;
+                    }
                 }
             }
         }
