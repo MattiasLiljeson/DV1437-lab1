@@ -61,8 +61,8 @@ public class Client {
         raceCourse = (RaceCourse)channel.readObject();
         
         if(raceCourse != null){
-            System.out.println("Received payload:");
-            System.out.println(this.raceCourse.toString());
+            //System.out.println("Received payload:");
+            //System.out.println(this.raceCourse.toString());
             success = true;
         }
         

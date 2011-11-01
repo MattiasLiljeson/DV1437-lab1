@@ -46,7 +46,6 @@ public class GameFrame extends JFrame{
     
     public void update(RaceUpdate raceUpdate){
         carUpdates = raceUpdate.carUpdates;
-		System.out.println("painting at "+carUpdates[0].posY);
 		repaint();
     }
 
