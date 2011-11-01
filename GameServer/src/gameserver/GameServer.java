@@ -58,9 +58,7 @@ public class GameServer {
         long prevTime = System.currentTimeMillis();
 		double timeSinceLastFrame = 0;
 		double timePerFrame = 1.0 / framesPerSecond;
-		int frameCount = 0;
-		long startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis() - startTime < 5000){
+        while(!done){
 			
             //Poll clients, update, send new positions to clients
             
@@ -91,11 +89,9 @@ public class GameServer {
                 RaceUpdate update = new RaceUpdate(carUpdatesArray);
                 clientHandler.sendRaceUpdate(update);
 				
-				frameCount++;
 				timeSinceLastFrame -= timePerFrame;
             }
         }
-		System.out.println(frameCount / 5.0);
         System.exit(0);
     }
 	

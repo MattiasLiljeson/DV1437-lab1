@@ -75,9 +75,13 @@ public class Car {
 		 *   frictionColor = 255 -> frictionConstant = 1 - FACTOR_MAX_FRICTION
 		 * then multiplied with speed taking delta time into account
 		 */
-		Color frictionColor = new Color(frictionMaskBuffImg.getRGB((int)posX, (int)posY));
-        double frictionConstant = 1 - (frictionColor.getBlue()/255.0*FACTOR_MAX_FRICTION);
-        speed *= frictionConstant * dt;
+		try {
+			Color frictionColor = new Color(frictionMaskBuffImg.getRGB((int)posX, (int)posY));
+			double frictionConstant = 1 - (frictionColor.getBlue()/255.0*FACTOR_MAX_FRICTION);
+			speed *= frictionConstant * dt;
+		} catch(ArrayIndexOutOfBoundsException ex) {
+			speed *= (1 - FACTOR_MAX_FRICTION) * dt; //max friction if outside of map
+		}
         
 		//----------------------------------------------------------------------
         // Steering
