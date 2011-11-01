@@ -151,6 +151,7 @@ public class Channel {
         try{
             if(outStream != null){
                 outStream.writeObject(obj);  // send serilized payload
+                System.out.println("success");
                 outStream.flush();
                 success = true;
             }else{
