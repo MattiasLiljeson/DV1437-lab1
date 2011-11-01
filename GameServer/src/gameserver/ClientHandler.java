@@ -18,7 +18,6 @@ public class ClientHandler implements Runnable{
     public final static int COMM_PORT = 5679;
     //ServerSocket servSock;
     private HashMap<Integer, ClientConnection> clientConnections; // must be a map, not ArrayList, since removing clients from an array list would fuck up id mapping.
-    private Object lockClientConnections = new Object();
     private int nextClientID = 0; //Client ID counter. Increases with every connected client. Cannot use clients.size() since it decreases when clients are removed. We want a unique number.
     private GameServer server;
     private Channel channel;
@@ -95,8 +94,10 @@ public class ClientHandler implements Runnable{
     public boolean removeClient(int id) {
         boolean result = false;
         synchronized(this) {
-            if(clientConnections.remove(id) != null)
+            if(clientConnections.remove(id) != null) {
                 result = true;
+				server.removeCar(id);
+			}
         }
         return result;
     }
