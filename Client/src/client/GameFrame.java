@@ -33,6 +33,7 @@ public class GameFrame extends JFrame{
 		
 		//init the GUI components
 		gamePanel = new JPanel();
+		gamePanel.setDoubleBuffered(true);
 		add(gamePanel);
 		mapW = colors.getIconWidth();
 		mapH = colors.getIconHeight();
@@ -45,12 +46,12 @@ public class GameFrame extends JFrame{
     
     public void update(RaceUpdate raceUpdate){
         carUpdates = raceUpdate.carUpdates;
-		invalidate();
+		System.out.println("painting at "+carUpdates[0].posY);
+		repaint();
     }
 
 	@Override
 	public void paint(Graphics g) {
-        super.paint(g);
 		colors.paintIcon(gamePanel, g, 0, 0);
 		
 		for(CarUpdate update : carUpdates) {

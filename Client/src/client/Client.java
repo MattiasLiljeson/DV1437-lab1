@@ -78,10 +78,10 @@ public class Client {
             if( object != null){
                 if(object instanceof RaceUpdate){
                     gameGUI.update((RaceUpdate)object);
-                    System.out.println("RaceUpdate received");
+                    //System.out.println("RaceUpdate received");
                 }
                 else if(object instanceof KeyStatesReq){
-                    System.out.println("KeyStatesReq received");
+                    //System.out.println("KeyStatesReq received");
                     KeyStates keyStates =  gameGUI.getKeyStates();
                     channel.sendObject(keyStates);
                 }
