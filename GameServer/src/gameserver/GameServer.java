@@ -76,19 +76,27 @@ public class GameServer {
             if(timeSinceLastFrame > timePerFrame){
                 clientHandler.pollClients();
                 
+				ArrayList<CarUpdate> carUpdates = new ArrayList<CarUpdate>(cars.size());
+				int i = 0;
 				synchronized(lockCars) {
-					CarUpdate[] carUpdatesArray = new CarUpdate[cars.size()];
-					int i = 0;
 					for(Car car : cars.values()){
+						if(car == null)
+							continue;
+						
 						//if(cars.size() > 1) //TODO: add 2player limit
 							car.update(timeSinceLastFrame, buffImg);
-						carUpdatesArray[i] = car.getCarUpdate();
+						carUpdates.add(car.getCarUpdate());
 						i++;
 					}
-					RaceUpdate update = new RaceUpdate(carUpdatesArray);
-					clientHandler.sendRaceUpdate(update);
 				}
+				CarUpdate[] carUpdatesArray = new CarUpdate[carUpdates.size()];
+				carUpdates.toArray(carUpdatesArray);
+				RaceUpdate update = new RaceUpdate(carUpdatesArray);
+				clientHandler.sendRaceUpdate(update);
                 
+				//removed stuff that was flagged for removal
+				removeFlaggedCars();
+				clientHandler.removeFlaggedClients();
 				
 				timeSinceLastFrame = 0;
             }
@@ -102,9 +110,22 @@ public class GameServer {
 		}
     }
     
-	public void removeCar(int id) {
+	public void flagCarForRemoval(int id) {
 		synchronized(lockCars) {
-			cars.remove(id);
+			cars.put(id, null);
+		}
+	}
+	
+	public void removeFlaggedCars() {
+		synchronized(lockCars) {
+			ArrayList<Integer> IDsToRemove = new ArrayList<Integer>(cars.size());
+			for(Map.Entry<Integer, Car> entry : cars.entrySet()){
+				if(entry.getValue() == null)
+					IDsToRemove.add(entry.getKey());
+			}
+			for(Integer ID : IDsToRemove){
+				cars.remove(ID);
+			}
 		}
 	}
 	

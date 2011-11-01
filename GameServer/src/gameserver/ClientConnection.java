@@ -32,7 +32,7 @@ public class ClientConnection implements Runnable{
     public void run(){
         // Fetch info about the car color etc and create a car and add the
         // client to the clienthandler before entering the game loop.
-        done = !initClientData();
+        done = !initClientData(); //blocks until ClientData has been received
         
         // Enter main loop.
         KeyStates keyStates = null;
@@ -41,7 +41,7 @@ public class ClientConnection implements Runnable{
             try{
                 keyStates = (KeyStates)channel.readObject();
             }catch(Channel.ConnectionLostException ex){
-                clientHandler.removeClient(id);
+                clientHandler.flagClientForRemoval(id);
                 close();
                 done = true;
             }
@@ -105,7 +105,7 @@ public class ClientConnection implements Runnable{
         try{
             result = channel.sendObject(new KeyStatesReq());
         }catch(Channel.ConnectionLostException ex){
-            clientHandler.removeClient(id);
+            clientHandler.flagClientForRemoval(id);
             close();
         }
         return result;
@@ -116,7 +116,7 @@ public class ClientConnection implements Runnable{
         try{
             return channel.sendObject(update);
         }catch(Channel.ConnectionLostException ex){
-            clientHandler.removeClient(id);
+            clientHandler.flagClientForRemoval(id);
             close();
         }
         return result;

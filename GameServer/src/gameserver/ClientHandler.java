@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -86,26 +87,39 @@ public class ClientHandler implements Runnable{
     public void pollClients(){
         synchronized(this) {
             for(Integer clientID : clientConnections.keySet()){
-                clientConnections.get(clientID).poll();
+				if(clientConnections.get(clientID) != null)
+					clientConnections.get(clientID).poll();
             }
         }
     }
     
-    public boolean removeClient(int id) {
+    public boolean flagClientForRemoval(int id) {
         boolean result = false;
         synchronized(this) {
-            if(clientConnections.remove(id) != null) {
-                result = true;
-				server.removeCar(id);
-			}
+            clientConnections.put(id, null);
         }
+		server.flagCarForRemoval(id);
         return result;
     }
     
+	public void removeFlaggedClients() {
+        synchronized(this) {
+			ArrayList<Integer> IDsToRemove = new ArrayList<Integer>(clientConnections.size());
+			for(Map.Entry<Integer, ClientConnection> entry : clientConnections.entrySet()){
+				if(entry.getValue() == null)
+					IDsToRemove.add(entry.getKey());
+			}
+			for(Integer ID : IDsToRemove){
+				clientConnections.remove(ID);
+			}
+		}
+	}
+	
     public void sendRaceUpdate(RaceUpdate update){
         synchronized(this) {
             for(Integer clientID : clientConnections.keySet()){
-                clientConnections.get(clientID).sendRaceUpdate(update);
+				if(clientConnections.get(clientID) != null)
+					clientConnections.get(clientID).sendRaceUpdate(update);
             }
         }
     }
