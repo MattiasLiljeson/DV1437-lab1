@@ -15,8 +15,8 @@ public class ClientHandler implements Runnable{
     public final static String SERVER_HOSTNAME = "localhost";
     public final static int COMM_PORT = 5679;
     //ServerSocket servSock;
-    private ArrayList<ClientConnection> clients; // TODO: Change impl to Map?
-    private int numClients = 0;
+    private ArrayList<ClientConnection> clientConnections; // TODO: Change impl to Map?
+    private int nextClientID = 0; //Client ID counter. Increases with every connected client. Cannot use clients.size() since it decreases when clients are removed. We want a unique number.
     private GameServer server;
     private Channel channel;
     
@@ -27,7 +27,7 @@ public class ClientHandler implements Runnable{
         channel = new Channel(COMM_PORT);
         
         this.server = server;
-        clients = new ArrayList<ClientConnection>();
+        clientConnections = new ArrayList<ClientConnection>();
         System.out.println("ClientHandler started");
     }
     
@@ -43,11 +43,16 @@ public class ClientHandler implements Runnable{
             System.out.println("A new client has connected");
 
             if(clientSock != null){
-                ClientConnection clientConn = new ClientConnection(clientSock, this, numClients);
-                clients.add(clientConn);
-                numClients++;
-                // TODO: Add a car for the client, fetch car color etc
+                ClientConnection clientConn = new ClientConnection(clientSock, this, nextClientID);
+                clientConnections.add(clientConn);
                 
+				// TODO: Add a car for the client, fetch car color etc
+				Car clientCar = new Car(400,200,0);
+                server.addCar(nextClientID, clientCar);
+				
+				//increase the id counter to prepare for the next client connection
+                nextClientID++;
+				
                 Thread thread = new Thread(clientConn);
                 thread.start();
                 clientSock = null;
@@ -59,13 +64,13 @@ public class ClientHandler implements Runnable{
     }
     
     public void pollClients(){
-        for(ClientConnection client : clients){
+        for(ClientConnection client : clientConnections){
             client.poll();
         }
     }
     
     public void sendRaceUpdate(RaceUpdate update){
-        for(ClientConnection client : clients){
+        for(ClientConnection client : clientConnections){
             client.sendRaceUpdate(update);
         }
     }

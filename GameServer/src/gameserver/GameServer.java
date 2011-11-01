@@ -9,7 +9,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -85,10 +84,10 @@ public class GameServer {
         }
         System.exit(0);
     }
+	
     public void addCar(int id, Car car){
         cars.put(id,car);
     }
-    
     
     public void updateKeyStates(int id, KeyStates keyStates){
         Car car = cars.get(id);
@@ -110,7 +109,7 @@ public class GameServer {
                 msg = br.readLine();
             }catch(IOException ignore){}
             if(msg.equals("exit")){
-                System.out.println("Exiting from gs");
+                System.out.println("Exiting from game server");
                 done = true;
             }
         }
@@ -120,7 +119,7 @@ public class GameServer {
         //TODO: remove hard coding below
         Channel channel = new Channel(hostname, port);
         RaceCourse raceCourse;
-        boolean success = true;
+        boolean success = true; //TODO: why is this not used?
         channel.connect();
         channel.openStreams();
         raceCourse = (RaceCourse)channel.readObject();
