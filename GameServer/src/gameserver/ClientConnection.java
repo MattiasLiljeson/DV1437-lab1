@@ -30,7 +30,12 @@ public class ClientConnection implements Runnable{
         KeyStates keyStates = null;
         while(!done){
             //Fetch keystates
-            keyStates = (KeyStates)channel.readObject();
+            try{
+                keyStates = (KeyStates)channel.readObject();
+            }catch(Channel.ConnectionLostException ex){
+                clientHandler.removeClient(id);
+                close();
+            }
 
             if(keyStates != null){
                 //System.out.println("Received payload:");
@@ -63,10 +68,24 @@ public class ClientConnection implements Runnable{
     }
 
     public boolean poll(){
-        return channel.sendObject(new KeyStatesReq());
+        boolean result = false;
+        try{
+            result = channel.sendObject(new KeyStatesReq());
+        }catch(Channel.ConnectionLostException ex){
+            clientHandler.removeClient(id);
+            close();
+        }
+        return result;
     }
 
     public boolean sendRaceUpdate(RaceUpdate update){
-        return channel.sendObject(update);
+        boolean result = false;
+        try{
+            return channel.sendObject(update);
+        }catch(Channel.ConnectionLostException ex){
+            clientHandler.removeClient(id);
+            close();
+        }
+        return result;
     }
 }

@@ -123,14 +123,15 @@ public class Channel {
         return success;
     }
     
-    public Object readObject(){
+    public Object readObject() throws ConnectionLostException{
         Object tmp = null;
         try{
             tmp = inStream.readObject();
         }catch(ClassNotFoundException ex){
-            System.out.println("Other Class than KeyStates received, " + ex);
+            System.out.println("Other Class than Object received, " + ex);
         }catch(IOException ex){
             System.out.println("Problem with socket input");
+            throw new ConnectionLostException();
         }
         return tmp;
     } 
@@ -146,7 +147,7 @@ public class Channel {
         connPort = connectionPort;
     }
     
-    public boolean sendObject(Object obj){
+    public boolean sendObject(Object obj) throws ConnectionLostException{
         boolean success = false;
         try{
             if(outStream != null){
@@ -157,10 +158,12 @@ public class Channel {
                 success = true;
             }else{
                 System.out.println("output stream not opened");
+                success = false;
             }
         }catch(IOException ex){
             System.out.println("Error when sending object through stream");
             success = false;
+            throw new ConnectionLostException();
         }
         return success;
     }
@@ -176,5 +179,9 @@ public class Channel {
         }
         
         return success;
+    }
+    
+    public class ConnectionLostException extends Throwable{
+        //TODO: Implements SpecOps exception
     }
 }

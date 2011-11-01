@@ -125,19 +125,21 @@ public class GameServer {
         }
         
     }
+    
     public RaceCourse fetchRaceCourse(String hostname, int port){
-        //TODO: remove hard coding below
         Channel channel = new Channel(hostname, port);
         RaceCourse raceCourse;
-        boolean success = true; //TODO: why is this not used?
         channel.connect();
         channel.openStreams();
-        raceCourse = (RaceCourse)channel.readObject();
+        try{
+            raceCourse = (RaceCourse)channel.readObject();
+        }catch(Channel.ConnectionLostException ex){
+            raceCourse = null;
+        }
         
         if(raceCourse != null){
             System.out.println("Received payload:");
             System.out.println(raceCourse.toString());
-            success = true;
         }
         
         channel.closeStreams();
