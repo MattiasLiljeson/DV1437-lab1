@@ -81,8 +81,10 @@ public class ClientHandler implements Runnable{
     public boolean removeClient(int id) {
         boolean result = false;
         synchronized(this) {
-            if(clientConnections.remove(id) != null)
+            if(clientConnections.remove(id) != null) {
                 result = true;
+				server.removeCar(id);
+			}
         }
         return result;
     }

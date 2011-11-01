@@ -78,8 +78,7 @@ public class GameServer {
                 
                 CarUpdate[] carUpdatesArray = new CarUpdate[cars.size()];
                 int i = 0;
-                for(Map.Entry<Integer, Car> entry : cars.entrySet()){
-                    Car car = entry.getValue();
+                for(Car car : cars.values()){
                     //if(cars.size() > 1) //TODO: add 2player limit
                         car.update(timeSinceLastFrame, buffImg);
                     carUpdatesArray[i] = car.getCarUpdate();
@@ -89,7 +88,7 @@ public class GameServer {
                 RaceUpdate update = new RaceUpdate(carUpdatesArray);
                 clientHandler.sendRaceUpdate(update);
 				
-				timeSinceLastFrame -= timePerFrame;
+				timeSinceLastFrame = 0;
             }
         }
         System.exit(0);
@@ -99,6 +98,9 @@ public class GameServer {
         cars.put(id,car);
     }
     
+	public void removeCar(int id) {
+		cars.remove(id);
+	}
     public void updateKeyStates(int id, KeyStates keyStates){
         Car car = cars.get(id);
         if(car != null){
