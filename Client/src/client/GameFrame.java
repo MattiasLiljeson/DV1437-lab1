@@ -22,6 +22,7 @@ import javax.swing.JPanel;
  */
 public class GameFrame extends JFrame{
     private KeyStates keyStates;
+	public final Object lockKeyStates = new Object();
     private KeyStateListener keyListener;
 	private CarUpdate[] carUpdates;
 	private JPanel gamePanel;
@@ -90,12 +91,16 @@ public class GameFrame extends JFrame{
 
         @Override
         public void keyPressed(KeyEvent e) {
-            keyStates.setKey(e.getKeyCode(), true);
+			synchronized(lockKeyStates) {
+				keyStates.setKey(e.getKeyCode(), true);
+			}
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            keyStates.setKey(e.getKeyCode(), false);
+			synchronized(lockKeyStates) {
+				keyStates.setKey(e.getKeyCode(), false);
+			}
         }
     }
 }

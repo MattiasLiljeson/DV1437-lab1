@@ -84,13 +84,14 @@ public class Client {
                     gameGUI.update((RaceUpdate)object);
                 }
                 else if(object instanceof KeyStatesReq){
-                    //System.out.println("KeyStatesReq received");
-                    KeyStates keyStates =  gameGUI.getKeyStates();
-                    try{
-                        channel.sendObject(keyStates);
-                    }catch(Channel.ConnectionLostException ex){
-                        done = true;
-                    }
+					KeyStates keyStates =  gameGUI.getKeyStates();
+					try{
+						synchronized(gameGUI.lockKeyStates) {
+							channel.sendObject(keyStates);
+						}
+					}catch(Channel.ConnectionLostException ex){
+						done = true;
+					}
                 }
             }
         }
