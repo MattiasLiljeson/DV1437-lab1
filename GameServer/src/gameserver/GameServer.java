@@ -18,7 +18,7 @@ public class GameServer {
     private double framesPerSecond = 1337;
     private Map<Integer,Car> cars;
     private boolean done = false;
-    
+    private final Object lockCars = new Object();
     /**
      * @param args the command line arguments
      */
@@ -76,17 +76,19 @@ public class GameServer {
             if(timeSinceLastFrame > timePerFrame){
                 clientHandler.pollClients();
                 
-                CarUpdate[] carUpdatesArray = new CarUpdate[cars.size()];
-                int i = 0;
-                for(Car car : cars.values()){
-                    //if(cars.size() > 1) //TODO: add 2player limit
-                        car.update(timeSinceLastFrame, buffImg);
-                    carUpdatesArray[i] = car.getCarUpdate();
-                    i++;
-                }
+				synchronized(lockCars) {
+					CarUpdate[] carUpdatesArray = new CarUpdate[cars.size()];
+					int i = 0;
+					for(Car car : cars.values()){
+						//if(cars.size() > 1) //TODO: add 2player limit
+							car.update(timeSinceLastFrame, buffImg);
+						carUpdatesArray[i] = car.getCarUpdate();
+						i++;
+					}
+					RaceUpdate update = new RaceUpdate(carUpdatesArray);
+					clientHandler.sendRaceUpdate(update);
+				}
                 
-                RaceUpdate update = new RaceUpdate(carUpdatesArray);
-                clientHandler.sendRaceUpdate(update);
 				
 				timeSinceLastFrame = 0;
             }
@@ -95,12 +97,17 @@ public class GameServer {
     }
 	
     public void addCar(int id, Car car){
-        cars.put(id,car);
+		synchronized(lockCars) {
+			cars.put(id,car);
+		}
     }
     
 	public void removeCar(int id) {
-		cars.remove(id);
+		synchronized(lockCars) {
+			cars.remove(id);
+		}
 	}
+	
     public void updateKeyStates(int id, KeyStates keyStates){
         Car car = cars.get(id);
         if(car != null){
