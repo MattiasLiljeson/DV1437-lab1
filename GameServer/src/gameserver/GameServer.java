@@ -137,11 +137,6 @@ public class GameServer {
             raceCourse = null;
         }
         
-        if(raceCourse != null){
-            System.out.println("Received payload:");
-            System.out.println(raceCourse.toString());
-        }
-        
         channel.closeStreams();
         channel.closeSockets();
         return raceCourse;

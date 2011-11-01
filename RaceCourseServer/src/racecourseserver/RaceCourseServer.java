@@ -58,13 +58,18 @@ public class RaceCourseServer {
         boolean done = false;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String input = "";
+        boolean recoveredFailure = false;
         while(!done){
             try{
                 input = br.readLine();
-            }catch(IOException ignore){}
+            }catch(IOException ex){
+                System.out.println("Input stream failure. Exiting server.");
+                done = true;
+                input = "";
+            }
             
             if(input.equals("exit")){
-                System.out.println("Exiting from rcs");
+                System.out.println("Exiting from race course server");
                 done = true;
             }
         }
@@ -77,15 +82,13 @@ public class RaceCourseServer {
             Socket clientSock = null;
             while(true){
                 clientSock = channel.accept();
-                System.out.println("A new client has connected");
+                System.out.println("A new client connected ("+clientSock.getInetAddress()+")");
 
                 if(clientSock != null){
                     Thread thread = new Thread(new RaceCourseSend(clientSock, raceCourse));
                     thread.start();
                     clientSock = null;
                 }
-
-                System.out.println("Client has been served");
             }
         }
         
@@ -107,6 +110,8 @@ public class RaceCourseServer {
             channel.openStreams();
             if(!channel.sendObject(payload)){
                 System.out.println("Failed to send race course");
+            } else {
+                System.out.println("Race course successfully sent");
             }
             channel.closeStreams();
             
@@ -115,9 +120,8 @@ public class RaceCourseServer {
                 Thread.sleep(1000); 
             }catch(InterruptedException ignore){}
             finally{
-                System.out.println("In finally statement, closing sockets");
                 channel.closeSockets();
-                System.out.println("In finally statement, closed sockets");
+                System.out.println("Client disconnected ("+sock.getInetAddress()+")");
             }
             
         }
