@@ -46,6 +46,9 @@ public class ClientHandler implements Runnable{
 
             if(clientSock != null){
                 ClientConnection clientConn = new ClientConnection(clientSock, this, nextClientID);
+                
+                //--------------------------------------------------------------
+                //TODO: break out this functionality into the clientConn thread which also waits for ClientInit message
                 synchronized(this) {
                     clientConnections.add(clientConn);
                 }
@@ -55,7 +58,7 @@ public class ClientHandler implements Runnable{
 		
                 //increase the id counter to prepare for the next client connection
                 nextClientID++;
-				
+				//--------------------------------------------------------------
                 Thread thread = new Thread(clientConn);
                 thread.start();
                 clientSock = null;

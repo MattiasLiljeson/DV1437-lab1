@@ -28,6 +28,8 @@ public class ClientConnection implements Runnable{
     @Override
     public void run(){
         KeyStates keyStates = null;
+        
+        //TODO: wait for InitClient message, create car, add to clientHandler.clientConnections and so on, before entering the loop
         while(!done){
             //Fetch keystates
             try{
