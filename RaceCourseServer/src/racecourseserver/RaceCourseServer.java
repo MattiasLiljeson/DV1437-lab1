@@ -108,10 +108,16 @@ public class RaceCourseServer {
         @Override
         public void run() {
             channel.openStreams();
-            if(!channel.sendObject(payload)){
-                System.out.println("Failed to send race course");
-            } else {
+            boolean success = true;
+            try{
+                success = channel.sendObject(payload);
+            }catch(Channel.ConnectionLostException ex){
+                success = false;
+            }
+            if(success){
                 System.out.println("Race course successfully sent");
+            } else {
+                System.out.println("Failed to send race course");
             }
             channel.closeStreams();
             
