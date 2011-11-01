@@ -9,7 +9,9 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import common.RaceUpdate;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
+import java.awt.geom.AffineTransform;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,7 +27,7 @@ public class GameFrame extends JFrame{
 	private JPanel gamePanel;
 	private int mapW, mapH;
 	private ImageIcon colors;
-	private int carW = 10, carH = 15;
+	private int carWidth = 15, carLength = 25;
 	
     GameFrame(ImageIcon colors){
         keyStates = new KeyStates();
@@ -68,8 +70,9 @@ public class GameFrame extends JFrame{
 
 			for(CarUpdate update : carUpdates) {
 				g.setColor(update.color);
-				//TODO: ta hänsyn till rotation
-				g.fillRect((int) (update.posX - carW/2.0), (int) (update.posY - carH/2.0), carW, carH);
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setTransform(AffineTransform.getRotateInstance(update.rotation, update.posX, update.posY));
+				g2d.fillRect((int) (update.posX - carLength/2.0), (int) (update.posY - carWidth/2.0), carLength, carWidth);
 			}
 		}
 	}

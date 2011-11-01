@@ -14,10 +14,10 @@ import java.awt.image.BufferedImage;
  */
 public class Car {
     // Force constants. All units are per second
-    public static final double FACTOR_BREAK = 50;
-    public static final double FACTOR_ACC = 50;
-    public static final double FACTOR_TURN = 10;
-    public static final double FACTOR_MAX_FRICTION = 0.3; // maximum friction is applied by multiplying speed with (1 - FACTOR_MAX_FRICTION)
+    public static final double FACTOR_BREAK = 130;
+    public static final double FACTOR_ACC = 130;
+    public static final double FACTOR_TURN = 3;
+    public static final double FACTOR_MAX_FRICTION = 0.85; // maximum friction is applied by multiplying speed with (1 - FACTOR_MAX_FRICTION)
     
     private KeyStates keyStates;
 	private double posX, posY;
