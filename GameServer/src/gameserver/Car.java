@@ -27,15 +27,16 @@ public class Car {
     private Color color;
     private CarUpdate carUpdate;
 	private int nextCheckpoint = 0;
+    private String name;
     
-    public Car(Color color){
+    public Car(Color color, String name){
         this(100,100,100,color);
     }
     
-	public Car(double posX, double posY, double direction)
-	{
-		this(posX, posY, direction, Color.blue);
-	}
+//	public Car(double posX, double posY, double direction)
+//	{
+//		this(posX, posY, direction, Color.blue);
+//	}
 	
     public Car(double posX, double posY, double direction, Color color){
         this.direction = direction;

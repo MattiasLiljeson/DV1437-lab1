@@ -45,7 +45,7 @@ public class RaceCourseServer {
 		checkpoints[0] = new Line2D.Double(640,100,530,220);
 		checkpoints[1] = new Line2D.Double(440,420,400,540);
 		checkpoints[2] = new Line2D.Double(85,280,210,270);
-        raceCourse = new RaceCourse(raceCourseImg, frictionMaskImg, checkpoints);
+        raceCourse = new RaceCourse(raceCourseImg, frictionMaskImg, checkpoints, 100, 100, 100);
     }
     
     public void run(){

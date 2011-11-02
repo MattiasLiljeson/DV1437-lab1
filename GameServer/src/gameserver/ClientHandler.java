@@ -48,20 +48,8 @@ public class ClientHandler implements Runnable{
             if(clientSock != null){
                 ClientConnection clientConn = new ClientConnection(clientSock, this, nextClientID);
                 
-                //--------------------------------------------------------------
-                // TODO: break out this functionality into the clientConn thread 
-                // which also waits for ClientInit message
-//                synchronized(this) {
-//                    clientConnections.put(nextClientID, clientConn);
-//                }
-                // TODO: Add a car for the client, fetch car color etc
-//                Car clientCar = new Car(400,200,0, Color.red);
-//                server.addCar(nextClientID, clientCar);
-		
-                // Increase the id counter to prepare for the next client 
-                // connection
                 nextClientID++;
-				//--------------------------------------------------------------
+
                 Thread thread = new Thread(clientConn);
                 thread.start();
                 clientSock = null;

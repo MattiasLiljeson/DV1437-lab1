@@ -3,7 +3,6 @@
  */
 package common;
 
-import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.io.Serializable;
 import javax.swing.ImageIcon;
@@ -17,12 +16,19 @@ public class RaceCourse implements Serializable{
     public ImageIcon raceCourseImg;
     public ImageIcon frictionMaskImg;
     public Line2D[] checkpoints;
+    public double spawnX;
+    public double spawnY;
+    public double spawnDir;
     
     
-    public RaceCourse(ImageIcon raceCourseImg, ImageIcon frictionMaskImg, Line2D[] checkpoints){
+    public RaceCourse(ImageIcon raceCourseImg, ImageIcon frictionMaskImg,
+            Line2D[] checkpoints, double spawnX, double spawnY, double spawnDir){
         this.raceCourseImg = raceCourseImg;
         this.frictionMaskImg = frictionMaskImg;
         this.checkpoints = checkpoints;
+        this.spawnX = spawnX;
+        this.spawnY = spawnY;
+        this.spawnDir = spawnDir;
     }
     
     // Easteregg

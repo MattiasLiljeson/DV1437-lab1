@@ -7,7 +7,6 @@ import common.*;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.net.*;
-import java.util.Locale;
 
 /**
  *
@@ -94,7 +93,7 @@ public class ClientConnection implements Runnable{
                 color = new Color(0); // Not defined. Use black as color
             }
             
-            Car car = new Car(color);
+            Car car = new Car(color, clientData.playerName);
             clientHandler.addClient(id, this, car);
         }
         return success;
