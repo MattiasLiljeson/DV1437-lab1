@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class RaceUpdate implements Serializable{
     public HashMap<Integer, CarUpdate> carUpdates;
 	public int clientID;
+    public String winner;
 	
 	public RaceUpdate(HashMap<Integer, CarUpdate> carUpdates) {
 		this.carUpdates = carUpdates;

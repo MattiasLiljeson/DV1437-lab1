@@ -16,13 +16,14 @@ public class CarUpdate implements Serializable{
 	public double posY;
 	public double rotation; //angle in radians
 	public Color color;
-	public int nextCheckpoint;
+	public int nextCheckpoint = 0;
+    public int lapCount = 0;
+    public String name;
 
-	public CarUpdate(double posX, double posY, double rotation, Color color, int nextCheckpoint) {
+	public CarUpdate(double posX, double posY, double rotation, Color color) {
 		this.posX = posX;
 		this.posY = posY;
 		this.rotation = rotation;
 		this.color = color;
-		this.nextCheckpoint = nextCheckpoint;
 	}
 }

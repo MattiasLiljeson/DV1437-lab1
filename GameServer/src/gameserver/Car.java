@@ -27,6 +27,7 @@ public class Car {
     private Color color;
     private CarUpdate carUpdate;
 	private int nextCheckpoint = 0;
+    private int lapCount = 0;
     private String name;
     
     public Car(Color color, String name){
@@ -45,7 +46,7 @@ public class Car {
         this.color = color;
 		
         keyStates = new KeyStates();
-        carUpdate = new CarUpdate(posX, posY, direction, color, 0);
+        carUpdate = new CarUpdate(posX, posY, direction, color);
     }
     
     public CarUpdate getCarUpdate() {
@@ -126,10 +127,6 @@ public class Car {
 			}
 		}
     }
-
-	public int getNextCheckpoint() {
-		return nextCheckpoint;
-	}
     	
 	public boolean isIntersectingCheckpoint(Line2D checkpoint) {
 		return checkpoint.intersects(posX, posY, 20, 20);
