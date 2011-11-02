@@ -19,16 +19,22 @@ public class RaceCourse implements Serializable{
     public double spawnX;
     public double spawnY;
     public double spawnDir;
-    
+    public int numLaps = 5;
     
     public RaceCourse(ImageIcon raceCourseImg, ImageIcon frictionMaskImg,
-            Line2D[] checkpoints, double spawnX, double spawnY, double spawnDir){
+            Line2D[] checkpoints, double spawnX, double spawnY, double spawnDir,
+            int numLaps){
         this.raceCourseImg = raceCourseImg;
         this.frictionMaskImg = frictionMaskImg;
         this.checkpoints = checkpoints;
         this.spawnX = spawnX;
         this.spawnY = spawnY;
         this.spawnDir = spawnDir;
+        this.numLaps = numLaps;
+    }
+    
+    public int getNumLaps() {
+        return numLaps;
     }
     
     // Easteregg

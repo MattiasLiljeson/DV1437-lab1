@@ -18,7 +18,7 @@ public class CarUpdate implements Serializable{
 	public Color color;
 	public int nextCheckpoint = 0;
     public int lapCount = 0;
-    public String name;
+    public String name = null;
 
 	public CarUpdate(double posX, double posY, double rotation, Color color) {
 		this.posX = posX;

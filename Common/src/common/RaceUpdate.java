@@ -13,9 +13,9 @@ import java.util.HashMap;
 public class RaceUpdate implements Serializable{
     public HashMap<Integer, CarUpdate> carUpdates;
 	public int clientID;
-    public String winner;
+    public String winner = null;
 	
-	public RaceUpdate(HashMap<Integer, CarUpdate> carUpdates) {
+	public RaceUpdate(HashMap<Integer, CarUpdate> carUpdates, String winner) {
 		this.carUpdates = carUpdates;
 	}
 	

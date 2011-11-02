@@ -54,11 +54,21 @@ public class Car {
 		carUpdate.posY = posY;
         carUpdate.rotation = direction;
 		carUpdate.nextCheckpoint = nextCheckpoint;
+        carUpdate.name = name;
+        carUpdate.lapCount = lapCount;
         return carUpdate;
     }
     
     public Color getColor() {
         return color;
+    }
+    
+    public int getLapCount(){
+        return lapCount;
+    }
+
+    public String getName() {
+        return name;
     }
     
     public double getX() {
@@ -123,6 +133,7 @@ public class Car {
 			nextCheckpoint++;
 			if(nextCheckpoint == checkpoints.length) {
 				nextCheckpoint = 0;
+                lapCount++;
 			}
 		}
     }

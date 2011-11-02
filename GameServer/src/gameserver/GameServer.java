@@ -15,10 +15,13 @@ import java.util.*;
  * @author Mattias Liljeson <mattiasliljeson.gmail.com>
  */
 public class GameServer {
+    private final Object lockCars = new Object();
+    
     private double framesPerSecond = 1337;
     private Map<Integer,Car> cars;
     private boolean done = false;
-    private final Object lockCars = new Object();
+    private String winner = null;
+    
     /**
      * @param args the command line arguments
      */
@@ -77,7 +80,6 @@ public class GameServer {
                 clientHandler.pollClients();
                 
 				HashMap<Integer, CarUpdate> carUpdates = new HashMap<Integer, CarUpdate>();
-				int i = 0;
 				synchronized(lockCars) {
 					for(Map.Entry<Integer, Car> entry : cars.entrySet()){
 						Car car = entry.getValue();
@@ -87,10 +89,15 @@ public class GameServer {
 						//if(cars.size() > 1) //TODO: add 2player limit
 							car.update(timeSinceLastFrame, buffImg, raceCourse.checkpoints);
 						carUpdates.put(entry.getKey(), car.getCarUpdate());
-						i++;
+                        
+                        if(winner == null)
+                            if(car.getLapCount() >= raceCourse.getNumLaps())
+                                winner = car.getName();
 					}
 				}
-				RaceUpdate update = new RaceUpdate(carUpdates);
+                
+                
+				RaceUpdate update = new RaceUpdate(carUpdates, winner);
 				clientHandler.sendRaceUpdate(update);
                 
 				//removed stuff that was flagged for removal
