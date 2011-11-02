@@ -17,6 +17,7 @@ public class RaceUpdate implements Serializable{
 	
 	public RaceUpdate(HashMap<Integer, CarUpdate> carUpdates, String winner) {
 		this.carUpdates = carUpdates;
+        this.winner = winner;
 	}
 	
 }
