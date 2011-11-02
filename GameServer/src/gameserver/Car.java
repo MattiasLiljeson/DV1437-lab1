@@ -91,7 +91,6 @@ public class Car {
 			speed -= (speed * frictionConstant) * dt;
 		} catch(ArrayIndexOutOfBoundsException ex) {
 			speed *= (1 - FACTOR_MAX_FRICTION) * dt; //max friction if outside of map
-			System.out.println("out of bounds");
 		}
         
 		//----------------------------------------------------------------------

@@ -111,6 +111,7 @@ public class Channel {
             outStream = new ObjectOutputStream(cliSock.getOutputStream());
         }catch(IOException ex){
             System.out.println("Error in output stream creation");
+            ex.printStackTrace();
             success = false;
         }
         
@@ -118,6 +119,7 @@ public class Channel {
             inStream = new ObjectInputStream(cliSock.getInputStream()); 
         }catch(IOException ex){
             System.out.println("Error in input stream creation");
+            ex.printStackTrace();
             success = false;
         }
         return success;
@@ -131,6 +133,7 @@ public class Channel {
             System.out.println("Other Class than Object received, " + ex);
         }catch(IOException ex){
             System.out.println("Problem with socket input");
+            ex.printStackTrace();
             throw new ConnectionLostException();
         }
         return tmp;
