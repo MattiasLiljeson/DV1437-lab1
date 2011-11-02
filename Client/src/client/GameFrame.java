@@ -11,7 +11,9 @@ import java.awt.event.KeyEvent;
 import common.RaceUpdate;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
@@ -35,6 +37,7 @@ public class GameFrame extends JFrame{
 	private ImageIcon colors;
 	private Line2D[] checkpoints;
 	private int nextCheckpoint;
+    private String winner = null;
 	
     GameFrame(RaceCourse raceCourse){
         keyStates = new KeyStates();
@@ -56,6 +59,7 @@ public class GameFrame extends JFrame{
     }
     
     public void update(RaceUpdate raceUpdate){
+        winner = raceUpdate.winner;
         carUpdates = raceUpdate.carUpdates;
 		nextCheckpoint = carUpdates.get(raceUpdate.clientID).nextCheckpoint;
 		gamePanel.repaint();
@@ -67,10 +71,15 @@ public class GameFrame extends JFrame{
 	
 	private class GamePanel extends JPanel {
 		
+        AffineTransform affineTransform = new AffineTransform();
+        Font winnerFont = new Font("Garamond", Font.PLAIN, 45);
+        Color winnerColor = new Color(1.0f, 1.0f, 1.0f, 0.7f);
+        
 		public GamePanel() {
 			setDoubleBuffered(true);
 			setPreferredSize(new Dimension(mapW, mapH));
 			setSize(mapW, mapH);
+            
 		}
 		
 		@Override
@@ -78,14 +87,18 @@ public class GameFrame extends JFrame{
 			colors.paintIcon(this, g, 0, 0);
 
 			Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			
 			for(CarUpdate update : carUpdates.values()) {
 				g.setColor(update.color);
-				g2d.setTransform(AffineTransform.getRotateInstance(update.rotation, update.posX, update.posY));
+                affineTransform.setToRotation(update.rotation, update.posX, update.posY);
+				g2d.setTransform(affineTransform);
 				g2d.fillRect((int) (update.posX - carLength/2.0), (int) (update.posY - carWidth/2.0), carLength, carWidth);
 			}
 			
-			g2d.setTransform(new AffineTransform());
+            affineTransform.setToIdentity();
+            g2d.setTransform(affineTransform);
+            
 			for(int i=0; i<checkpoints.length; i++) {
 				if(i == nextCheckpoint) {
 					g2d.setColor(Color.blue);
@@ -94,6 +107,12 @@ public class GameFrame extends JFrame{
 				}
 				g2d.draw(checkpoints[i]);
 			}
+            
+            if(winner != null) {
+                g2d.setColor(winnerColor);
+                g2d.setFont(winnerFont);
+                g2d.drawString(winner+" won the race", mapW/2-200, mapH/2+10);
+            }
 		}
 	}
 	
