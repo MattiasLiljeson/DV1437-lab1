@@ -45,7 +45,8 @@ public class Client {
         
         channel = new Channel(hostname, PORT_GS);
         if(channel.connect()){
-            channel.openStreams();
+            if(!channel.openStreams())
+                System.out.println("Failed to open streams to to game server");
             
             boolean success = true;
             try{
@@ -57,22 +58,30 @@ public class Client {
             
             if(success)
                 gameLoop();
+        } else {
+            System.out.println("Failed to connect to game server");
         }
     }
     
     public RaceCourse fetchRaceCourse(String hostname, int port){
         Channel channel = new Channel(hostname, port);
-        RaceCourse raceCourse;
-        channel.connect();
-        channel.openStreams();
-        try{
-            raceCourse = (RaceCourse)channel.readObject();
-        }catch(Channel.ConnectionLostException ex){
-            raceCourse = null;
+        RaceCourse raceCourse = null;
+        if(channel.connect()) {
+            if(!channel.openStreams())
+                System.out.println("Failed to open streams to map server");
+
+            try{
+                raceCourse = (RaceCourse)channel.readObject();
+            }catch(Channel.ConnectionLostException ex){
+                raceCourse = null;
+            }
+        
+            channel.closeStreams();
+            channel.closeSockets();
+        } else {
+            System.out.println("Failed to connect to map server");
         }
         
-        channel.closeStreams();
-        channel.closeSockets();
         return raceCourse;
     }
 
