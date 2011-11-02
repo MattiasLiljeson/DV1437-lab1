@@ -31,7 +31,7 @@ public class Car {
     private String name;
     
     public Car(Color color, String name){
-        this(100,100,100,color);
+        this(100,100,100,color, name);
     }
     
 //	public Car(double posX, double posY, double direction)
@@ -39,11 +39,12 @@ public class Car {
 //		this(posX, posY, direction, Color.blue);
 //	}
 	
-    public Car(double posX, double posY, double direction, Color color){
+    public Car(double posX, double posY, double direction, Color color, String name){
         this.direction = direction;
 		this.posX = posX;
 		this.posY = posY;
         this.color = color;
+        this.name = name;
 		
         keyStates = new KeyStates();
         carUpdate = new CarUpdate(posX, posY, direction, color);
